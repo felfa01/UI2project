@@ -39,7 +39,7 @@ window.onload = (function() {
 
         // Cube
 
-        var boxGeometry = new THREE.BoxGeometry(200, 200, 200);
+        var boxGeometry = new THREE.BoxGeometry(300, 300, 300);
 
         for (var i = 0; i < boxGeometry.faces.length; i += 2) {
 
@@ -64,9 +64,10 @@ window.onload = (function() {
         cube.position.y = 200;
         scene.add(cube);
 
+/*
         // Plane
 
-        var planeGeometry = new THREE.PlaneGeometry(200, 200);
+        var planeGeometry = new THREE.PlaneGeometry(300, 300);
         planeGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
         var planeMaterial = new THREE.MeshBasicMaterial(
@@ -77,14 +78,17 @@ window.onload = (function() {
 
         plane = new THREE.Mesh(planeGeometry, planeMaterial);
         scene.add(plane);
-
+*/
+        //var renderer = new THREE.WebGLRenderer( { alpha: true } );
+        //renderer = new THREE.CanvasRenderer({ alpha: true }); /*transparent background*/
         renderer = new THREE.CanvasRenderer();
         renderer.setClearColor(0xf0f0f0);
-        renderer.setSize(600, 600);
+        //renderer.setClearColor(0x000000, 0);
+        renderer.setSize(600, 500);
 
         container.appendChild(renderer.domElement);
 
-        document.addEventListener('mousedown', onDocumentMouseDown, false);
+        document.getElementById("canvas").addEventListener('mousedown', onDocumentMouseDown, false);
 
         //window.addEventListener('resize', onWindowResize, false);
 
@@ -94,8 +98,8 @@ window.onload = (function() {
     function onDocumentMouseDown(event) {
         event.preventDefault();
 
-        document.addEventListener('mousemove', onDocumentMouseMove, false);
-        document.addEventListener('mouseup', onDocumentMouseUp, false);
+        document.getElementById("canvas").addEventListener('mousemove', onDocumentMouseMove, false);
+        document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp, false);
 
         mouseDown = true;
 
@@ -127,8 +131,8 @@ window.onload = (function() {
 
         mouseDown = false;
 
-        document.removeEventListener('mousemove', onDocumentMouseMove, false);
-        document.removeEventListener('mouseup', onDocumentMouseUp, false);
+        document.getElementById("canvas").removeEventListener('mousemove', onDocumentMouseMove, false);
+        document.getElementById("canvas").removeEventListener('mouseup', onDocumentMouseUp, false);
     }
 
     function projectOnTrackball(touchX, touchY) {
