@@ -32,7 +32,8 @@ var canvas = document.getElementById("canvas");
 console.log(canvas.childNodes);
 console.log(canvas);
 
-renderer = new THREE.WebGLRenderer();
+renderer = new THREE.WebGLRenderer({alpha: true});
+renderer.setClearColor(0x000000, 0);
 //renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setSize( canvas.offsetWidth, canvas.offsetHeight );
 canvas.appendChild( renderer.domElement );
@@ -47,7 +48,7 @@ window.addEventListener('resize', function() {
 
 //cube
 
-var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+var geometry = new THREE.BoxGeometry( 2, 2, 2 );
 
 for (var i = 0; i < geometry.faces.length; i += 2) {
 

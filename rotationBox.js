@@ -23,10 +23,29 @@ window.onload = (function() {
     var deltaX = 0,
         deltaY = 0;
 
+function onResize(element, callback) {
+        var height = element.clientHeight;
+        var width  = element.clientWidth;
+        
+        return setInterval(function() {
+            if (element.clientHeight != height || element.clientWidth != width) {
+              height = element.clientHeight;
+              width  = element.clientWidth;
+              callback();
+            }
+        }, 500);
+      }
+
 
     function init() {
 
         var container = document.getElementById("canvas");
+
+console.log(container.offsetWidth);
+console.log(container.offsetHeight);
+console.log(container);
+
+
 
         camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
         camera.position.z = 5;
@@ -34,6 +53,7 @@ window.onload = (function() {
         camera = new THREE.PerspectiveCamera(70, 1, 1, 1000);
         camera.position.y = 150;
         camera.position.z = 500;
+        camera.aspect = 1;
 
         scene = new THREE.Scene();
 
@@ -61,7 +81,7 @@ window.onload = (function() {
             });
 
         cube = new THREE.Mesh(boxGeometry, cubeMaterial);
-        cube.position.y = 200;
+        cube.position.y = 150;
         scene.add(cube);
 
 /*
@@ -79,21 +99,45 @@ window.onload = (function() {
         plane = new THREE.Mesh(planeGeometry, planeMaterial);
         scene.add(plane);
 */
-        //var renderer = new THREE.WebGLRenderer( { alpha: true } );
+        //renderer = new THREE.WebGLRenderer( { alpha: true } );
         //renderer = new THREE.CanvasRenderer({ alpha: true }); /*transparent background*/
-        renderer = new THREE.CanvasRenderer();
+        //renderer = new THREE.CanvasRenderer();
+        renderer = new THREE.WebGLRenderer({canvas: container});
+        container.width = container.clientWidth;
+        container.height = container.clientHeight;
         renderer.setClearColor(0xf0f0f0);
         //renderer.setClearColor(0x000000, 0);
-        renderer.setSize(600, 500);
+        //renderer.setSize(500, 500);
+        //renderer.setSize(container.offsetWidth, container.offsetHeight);
 
-        container.appendChild(renderer.domElement);
+        //container.appendChild(renderer.domElement);
 
-        document.getElementById("canvas").addEventListener('mousedown', onDocumentMouseDown, false);
 
+
+        window.addEventListener('resize', function() {
+        container.width = container.clientWidth;
+        container.height = container.clientHeight;
+        var WIDTH = container.width,
+        HEIGHT = container.height;
+        renderer.setSize(WIDTH, HEIGHT);
+        camera.aspect = WIDTH / HEIGHT;
+        camera.updateProjectionMatrix();
+        });
+
+        onResize(canvas, function () {
+          canvas.width  = canvas.clientWidth;
+          canvas.height = canvas.clientHeight;
+          renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
+          camera.aspect = canvas.clientWidth / canvas.clientHeight;
+          camera.updateProjectionMatrix();
+      });
+
+        //document.getElementById("canvas").addEventListener('mousedown', onDocumentMouseDown, false);
+        container.addEventListener('mousedown', onDocumentMouseDown, false);
         //window.addEventListener('resize', onWindowResize, false);
 
         animate();
-    };
+    }
 
     function onDocumentMouseDown(event) {
         event.preventDefault();
