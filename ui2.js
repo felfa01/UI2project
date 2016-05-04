@@ -77,23 +77,20 @@ cube = new THREE.Mesh( geometry, cubeMaterial );
 scene.add( cube );
 
 //small cubes
+
+var colors = [ 0x0000CD, 0xB22222, 0x32CD32 ];
+
 var smallGeometry = new THREE.BoxGeometry( 1, 1, 1 );
 
-for (var i = 0; i < smallGeometry.faces.length; i += 2) {
-
-            var color = {
-                h: (1 / (smallGeometry.faces.length)) * i,
-                s: 0.5,
-                l: 0.5
-            };
-
-            smallGeometry.faces[i].color.setHSL(color.h, color.s, color.l);
-            smallGeometry.faces[i + 1].color.setHSL(color.h, color.s, color.l);
-
-        }
 for (var i = 0; i < 3; i++){
 
-smallCube = new THREE.Mesh( smallGeometry, cubeMaterial );
+    var smallCubeMaterial = new THREE.MeshBasicMaterial( 
+    { 
+        color: colors[i],
+        overdraw: 0.5 
+    });
+
+smallCube = new THREE.Mesh( smallGeometry, smallCubeMaterial );
 
 smallCube.position.y = -3;
 smallCube.position.x = i*3 - 3;
