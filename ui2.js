@@ -46,6 +46,7 @@ window.addEventListener('resize', function() {
       camera.updateProjectionMatrix();
     });
 
+
 //cube
 
 var geometry = new THREE.BoxGeometry( 2, 2, 2 );
@@ -71,6 +72,8 @@ var cubeMaterial = new THREE.MeshBasicMaterial(
 
 
 //var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+
+
 
 cube = new THREE.Mesh( geometry, cubeMaterial );
 scene.add( cube );
@@ -102,12 +105,22 @@ animate();
 
 //copie of mouse move from rotationbox
 function onDocumentMouseDown(event) {
-        event.preventDefault();
+    event.preventDefault();
+    var mouse = new THREE.Vector2();
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    var raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(mouse, camera);
+    var intersects = raycaster.intersectObjects(scene.children);
+
+    if (intersects.length > 0) {
 
         document.getElementById("canvas").addEventListener('mousemove', onDocumentMouseMove, false);
         document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp, false);
 
         mouseDown = true;
+
 
         startPoint = {
             x: event.clientX,
@@ -115,8 +128,8 @@ function onDocumentMouseDown(event) {
         };
 
         rotateStartPoint = rotateEndPoint = projectOnTrackball(0, 0);
-    }
-
+    };
+}
     function onDocumentMouseMove(event) {
         deltaX = event.x - startPoint.x;
         deltaY = event.y - startPoint.y;
