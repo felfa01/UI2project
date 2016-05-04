@@ -47,7 +47,7 @@ window.addEventListener('resize', function() {
     });
 
 
-//cube
+//Main cube
 
 var geometry = new THREE.BoxGeometry( 2, 2, 2 );
 
@@ -73,11 +73,48 @@ var cubeMaterial = new THREE.MeshBasicMaterial(
 
 //var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 
-
-
 cube = new THREE.Mesh( geometry, cubeMaterial );
 scene.add( cube );
 
+//small cubes
+var smallGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+
+for (var i = 0; i < smallGeometry.faces.length; i += 2) {
+
+            var color = {
+                h: (1 / (smallGeometry.faces.length)) * i,
+                s: 0.5,
+                l: 0.5
+            };
+
+            smallGeometry.faces[i].color.setHSL(color.h, color.s, color.l);
+            smallGeometry.faces[i + 1].color.setHSL(color.h, color.s, color.l);
+
+        }
+for (var i = 0; i < 3; i++){
+
+smallCube = new THREE.Mesh( smallGeometry, cubeMaterial );
+
+smallCube.position.y = -3;
+smallCube.position.x = i*3 - 3;
+
+
+scene.add( smallCube );
+
+}
+
+
+/*                
+                for ( var i = 0; i < 3; i ++ ) {
+                    var object = new THREE.Mesh( smallGeometry, cubeMaterial );
+                    //object.position.x = 0;
+                    //object.position.y = 100;
+                    //object.position.z = 0;
+                    console.log(object);
+                    console.log(cube);
+                    scene.add( object );
+                }
+*/
 
 
 camera.position.z = 5;
@@ -198,7 +235,7 @@ function onDocumentMouseDown(event) {
     }
 
     function render() {
-        if (!mouseDown) {
+       if (!mouseDown) {
             var drag = 0.95;
             var minDelta = 0.05;
 
