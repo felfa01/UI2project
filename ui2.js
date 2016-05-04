@@ -149,19 +149,23 @@ function onDocumentMouseDown(event) {
     var intersects = raycaster.intersectObjects(scene.children);
 
     if (intersects.length > 0) {
+        console.log(intersects[0].object.position.y);
+        if (intersects[0].object.position.y == 0) {
+            document.getElementById("canvas").addEventListener('mousemove', onDocumentMouseMove, false);
+            document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp, false);
 
-        document.getElementById("canvas").addEventListener('mousemove', onDocumentMouseMove, false);
-        document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp, false);
-
-        mouseDown = true;
+            mouseDown = true;
 
 
-        startPoint = {
-            x: event.clientX,
-            y: event.clientY
+            startPoint = {
+                x: event.clientX,
+                y: event.clientY
+            };
+
+            rotateStartPoint = rotateEndPoint = projectOnTrackball(0, 0);
         };
-
-        rotateStartPoint = rotateEndPoint = projectOnTrackball(0, 0);
+        document.getElementById("canvas").addEventListener('mousemove', MoveCube, false);
+        document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp, false);
     };
 }
     function onDocumentMouseMove(event) {
