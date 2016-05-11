@@ -20,6 +20,9 @@ var startPoint = {
 var deltaX = 0,
 	deltaY = 0;
 
+var Y = 0,
+    X = 0;
+
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2(), 
 offset = new THREE.Vector3(),
@@ -174,8 +177,14 @@ function onDocumentMouseDown(event) {
             rotateStartPoint = rotateEndPoint = projectOnTrackball(0, 0);
 
         }else if(SELECTED.name == 'Small cubes'){
-
+            startPoint = {
+                x: event.clientX,
+                y: event.clientY
+            };
+            mouseDown = true;
+        console.log(startPoint);
         console.log(SELECTED);
+
         document.getElementById("canvas").addEventListener('mousemove', MoveCube, false);
         //document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp, false);
 
@@ -196,8 +205,32 @@ function onDocumentMouseDown(event) {
     }
 
     function MoveCube(event) {
-       
 
+
+
+        if (SELECTED.name == "Small cubes") {
+            X = (event.x - startPoint.x);
+            Y = (event.y - startPoint.y);
+            SELECTED.position.x = X;
+            SELECTED.position.y = Y;
+            console.log(X);
+            console.log(Y);
+            //lastMoveTimestamp = new Date();
+        };
+
+
+    }
+
+    function newCubePosition(event) {
+        if (new Date().getTime() - lastMoveTimestamp.getTime() > moveReleaseTimeDelta) {
+            deltaX = event.x - startPoint.x;
+            deltaY = event.y - startPoint.y;
+        }
+
+        mouseDown = false;
+
+        document.getElementById("canvas").removeEventListener('mousemove', MoveCube, false);
+        document.getElementById("canvas").removeEventListener('mouseup', newCubePosition, false);
     }
 
 
