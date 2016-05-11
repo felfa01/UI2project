@@ -23,6 +23,8 @@ var deltaX = 0,
 var Y = 0,
     X = 0;
 
+var cubeColor = [];
+
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2(), 
 offset = new THREE.Vector3(),
@@ -58,11 +60,13 @@ window.addEventListener('resize', function() {
 
 //Main cube
 
-var geometry = new THREE.BoxGeometry( 2, 2, 2 );
+var geometry = new THREE.BoxGeometry( 2.5, 2.5, 2.5 );
 
 for (var i = 0; i < geometry.faces.length; i += 2) {
 
-            var color = {
+            var color = 
+
+            {
                 h: (1 / (geometry.faces.length)) * i,
                 s: 0.5,
                 l: 0.5
@@ -71,6 +75,10 @@ for (var i = 0; i < geometry.faces.length; i += 2) {
             geometry.faces[i].color.setHSL(color.h, color.s, color.l);
             geometry.faces[i + 1].color.setHSL(color.h, color.s, color.l);
 
+            geometry.faces.id = i; 
+
+            cubeColor.push(geometry.faces[i].color.getStyle());
+            console.log(cubeColor);
         }
 
 var cubeMaterial = new THREE.MeshBasicMaterial(
@@ -79,34 +87,45 @@ var cubeMaterial = new THREE.MeshBasicMaterial(
                 overdraw: 0.5
             });
 
-
 //var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 
 cube = new THREE.Mesh( geometry, cubeMaterial );
 cube.name = "Big cube";
 scene.add( cube );
 
+
 //small cubes
 
-var colors = [ 0x0000CD, 0xB22222, 0x32CD32 ];
 
-var smallGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+var smallBox = new THREE.BoxGeometry( 1, 1, 1 );
+var smallSphere = new THREE.SphereGeometry( 1, 6.2, 6.2 );
+var smallTorus = new THREE.TorusGeometry( 0.7, 0.3, 2, 7 );
+
+var figures = [smallBox, smallSphere, smallTorus];
+
+//var colors = [ 0xBF4040, 0xBFBF40, 0x40BF40, 0x40BFBF, 0x4040BF, 0xBF40BF];
 
 for (var i = 0; i < 3; i++){
 
     var smallCubeMaterial = new THREE.MeshBasicMaterial( 
     { 
-        color: colors[i],
+        //color: colors[i],
+        //color: colors[Math.floor(Math.random() * colors.length)],
+        color: cubeColor[Math.floor(Math.random() * cubeColor.length)],
         overdraw: 0.5 
     });
 
-smallCube = new THREE.Mesh( smallGeometry, smallCubeMaterial );
+smallCube = new THREE.Mesh( figures[Math.floor(Math.random() * figures.length)], smallCubeMaterial );
+//smallCube = new THREE.Mesh( smallTorus, smallCubeMaterial );
 
 smallCube.position.y = -3;
 smallCube.position.x = i*3 - 3;
 
 smallCube.name = 'Small cubes';
 scene.add( smallCube );
+
+console.log(smallCube.material.color);
+console.log(cube.geometry.faces[1].color);
 
 }
 
@@ -123,8 +142,13 @@ scene.add( smallCube );
                 }
 */
 
+plane = new THREE.Mesh(
+                    new THREE.PlaneBufferGeometry( 2000, 2000, 8, 8 ),
+                    new THREE.MeshBasicMaterial( { visible: false } )
+                    );
+scene.add( plane );
 
-camera.position.z = 5;
+camera.position.z = 7;
 
 /*
 //reder function from before adding rotationBox code. 
@@ -141,7 +165,8 @@ console.log(canvas.childNodes);
 
 
 canvas.addEventListener('mousedown', onDocumentMouseDown, false);
-
+//canvas.addEventListener('mousemove', onDocumentMouseMove, false);
+//canvas.addEventListener('mouseup', onDocumentMouseUp2, false);
 animate();
 
 }
@@ -186,7 +211,7 @@ function onDocumentMouseDown(event) {
         console.log(SELECTED);
 
         document.getElementById("canvas").addEventListener('mousemove', MoveCube, false);
-        //document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp, false);
+        document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp2, false);
 
     };
   }
@@ -206,20 +231,75 @@ function onDocumentMouseDown(event) {
 
     function MoveCube(event) {
 
-
-
-        if (SELECTED.name == "Small cubes") {
-            X = (event.x - startPoint.x);
-            Y = (event.y - startPoint.y);
-            SELECTED.position.x = X;
-            SELECTED.position.y = Y;
+        //if (SELECTED.name == "Small cubes") {
+            //X = (event.x - startPoint.x /50);
+            //Y = (event.y - startPoint.y /50);
+            //SELECTED.position.x = X;
+            //SELECTED.position.y = Y;
+            /*
+            var intersects = raycaster.intersectObjects(scene.children);
+            SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
             console.log(X);
             console.log(Y);
+            console.log(mouse.x);
+            console.log(mouse.y);
+            console.log(offset);
+            */
             //lastMoveTimestamp = new Date();
-        };
+            event.preventDefault();
+                mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+                //
+                raycaster.setFromCamera( mouse, camera );
 
+                if (SELECTED != null){
 
+                if ( SELECTED.name != 'Big cube' ) {
+                    var intersects = raycaster.intersectObject( plane, cube );
+                    if ( intersects.length > 0 ) {
+                        SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
+                        matchNRemove(SELECTED, cube);
+                    }
+                    
+                    return;
+
+                }
+                var intersects = raycaster.intersectObjects( scene.children, true );
+
+                if ( intersects.length > 0) {
+                    console.log('nu krockar grjer');
+                    
+                    /*
+                    if ( INTERSECTED != intersects[ 0 ].object ) {
+                        if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+                        INTERSECTED = intersects[ 0 ].object;
+                        INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+                        plane.position.copy( INTERSECTED.position );
+                        plane.lookAt( camera.position );
+                    }
+                    */
+                    canvas.style.cursor = 'pointer';
+                } else {
+                    if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+                    INTERSECTED = null;
+                    canvas.style.cursor = 'auto';
+                }
+            }
+            //}
     }
+
+    function onDocumentMouseUp2( event ) {
+                event.preventDefault();
+                /*
+                controls.enabled = true;
+                if ( INTERSECTED ) {
+                    plane.position.copy( INTERSECTED.position );
+                    SELECTED = null;
+                }
+                //container.style.cursor = 'auto';
+                */
+                SELECTED = null;
+            }
 
     function newCubePosition(event) {
         if (new Date().getTime() - lastMoveTimestamp.getTime() > moveReleaseTimeDelta) {
@@ -245,6 +325,42 @@ function onDocumentMouseDown(event) {
         document.getElementById("canvas").removeEventListener('mousemove', onDocumentMouseMove, false);
         document.getElementById("canvas").removeEventListener('mouseup', onDocumentMouseUp, false);
     }
+
+    function matchNRemove( SELECTED, cube ) {
+        
+        if (SELECTED != null){
+
+        if (SELECTED.name != 'Big cube') {
+
+            var sR = Math.round(SELECTED.material.color.r * 255);
+            var sB = Math.round(SELECTED.material.color.b * 255);
+            var sG = Math.round(SELECTED.material.color.g * 255);
+
+            var sColor = {r: sR, b: sB, g: sG};
+
+            //console.log('s');
+            //console.log(sColor);
+
+        for (var i = 0; i < 12; i++){
+
+            var cR = Math.round(cube.geometry.faces[i].color.r * 255);
+            var cB = Math.round(cube.geometry.faces[i].color.b * 255);
+            var cG = Math.round(cube.geometry.faces[i].color.g * 255);
+
+            var cColor = {r: cR, b: cB, g: cG};
+
+            //console.log('c');
+            //console.log(cColor);
+        
+
+        if ((cR - 1 <= sR && sR <= cR + 1) && (cB - 1 <= sB && sB <= cB + 1) && (cG - 1 <= sG && sG <= cG + 1)) {
+            console.log('Sant!');
+            scene.remove(SELECTED);
+        }
+        }
+    }
+}
+}
 
     function projectOnTrackball(touchX, touchY) {
         var mouseOnBall = new THREE.Vector3();
