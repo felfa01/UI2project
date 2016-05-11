@@ -1,6 +1,6 @@
 window.onload = (function() {
 
-//copie from rotationBox
+//global var
 var plane;
 var mouseDown = false;
 var rotateStartPoint = new THREE.Vector3(0, 0, 1);
@@ -19,11 +19,17 @@ var startPoint = {
 };
 var deltaX = 0,
 	deltaY = 0;
-//end of copie
+
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2(), 
+offset = new THREE.Vector3(),
+INTERSECTED, SELECTED;
 
 var scene = new THREE.Scene();
 
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+//function for adding scen & figures
 
 function init() { 
 
@@ -74,6 +80,7 @@ var cubeMaterial = new THREE.MeshBasicMaterial(
 //var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 
 cube = new THREE.Mesh( geometry, cubeMaterial );
+cube.name = "Big cube";
 scene.add( cube );
 
 //small cubes
@@ -95,7 +102,7 @@ smallCube = new THREE.Mesh( smallGeometry, smallCubeMaterial );
 smallCube.position.y = -3;
 smallCube.position.x = i*3 - 3;
 
-
+smallCube.name = 'Small cubes';
 scene.add( smallCube );
 
 }
@@ -137,25 +144,27 @@ animate();
 }
 
 
-//copie of mouse move from rotationbox
+//copy of mouse move from rotationbox with configs
 function onDocumentMouseDown(event) {
     event.preventDefault();
-    var mouse = new THREE.Vector2();
+
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    var raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, camera);
     var intersects = raycaster.intersectObjects(scene.children);
 
     if (intersects.length > 0) {
-        console.log(intersects[0].object.position.y);
-        if (intersects[0].object.position.y == 0) {
+
+        SELECTED = intersects[0].object;
+
+        if (SELECTED.name == 'Big cube') {
+
+            console.log(SELECTED);
             document.getElementById("canvas").addEventListener('mousemove', onDocumentMouseMove, false);
             document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp, false);
 
             mouseDown = true;
-
 
             startPoint = {
                 x: event.clientX,
@@ -163,11 +172,17 @@ function onDocumentMouseDown(event) {
             };
 
             rotateStartPoint = rotateEndPoint = projectOnTrackball(0, 0);
-        };
+
+        }else if(SELECTED.name == 'Small cubes'){
+
+        console.log(SELECTED);
         document.getElementById("canvas").addEventListener('mousemove', MoveCube, false);
-        document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp, false);
+        //document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp, false);
+
     };
+  }
 }
+
     function onDocumentMouseMove(event) {
         deltaX = event.x - startPoint.x;
         deltaY = event.y - startPoint.y;
@@ -179,6 +194,12 @@ function onDocumentMouseDown(event) {
 
         lastMoveTimestamp = new Date();
     }
+
+    function MoveCube(event) {
+       
+
+    }
+
 
     function onDocumentMouseUp(event) {
         if (new Date().getTime() - lastMoveTimestamp.getTime() > moveReleaseTimeDelta) {
@@ -271,7 +292,7 @@ function onDocumentMouseDown(event) {
 
         rotateEndPoint = rotateStartPoint;
     }
-//end of copie
+//end of copy
 
     init();
 
