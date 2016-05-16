@@ -24,11 +24,11 @@ var Y = 0,
     X = 0;
 
 var cubeColor = [];
-
+var raycaster2 = new THREE.Raycaster();
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2(), 
 offset = new THREE.Vector3(),
-INTERSECTED, SELECTED;
+INTERSECTED, SELECTED, selectedColor;
 
 var scene = new THREE.Scene();
 
@@ -40,8 +40,8 @@ function init() {
 
 var canvas = document.getElementById("canvas");
 
-console.log(canvas.childNodes);
-console.log(canvas);
+//console.log(canvas.childNodes);
+//console.log(canvas);
 
 renderer = new THREE.WebGLRenderer({alpha: true});
 renderer.setClearColor(0x000000, 0);
@@ -75,10 +75,11 @@ for (var i = 0; i < geometry.faces.length; i += 2) {
             geometry.faces[i].color.setHSL(color.h, color.s, color.l);
             geometry.faces[i + 1].color.setHSL(color.h, color.s, color.l);
 
-            geometry.faces.id = i; 
+            geometry.faces.id = i;
+
 
             cubeColor.push(geometry.faces[i].color.getStyle());
-            console.log(cubeColor);
+            //console.log(cubeColor);
         }
 
 var cubeMaterial = new THREE.MeshBasicMaterial(
@@ -91,6 +92,7 @@ var cubeMaterial = new THREE.MeshBasicMaterial(
 
 cube = new THREE.Mesh( geometry, cubeMaterial );
 cube.name = "Big cube";
+
 scene.add( cube );
 
 
@@ -120,12 +122,16 @@ smallCube = new THREE.Mesh( figures[Math.floor(Math.random() * figures.length)],
 
 smallCube.position.y = -3;
 smallCube.position.x = i*3 - 3;
+    //console.log(cube);
+//cube.rotation.x = 0;
+  //  cube.rotation.y = 0;
+    //cube.rotation.z = 0;
 
 smallCube.name = 'Small cubes';
 scene.add( smallCube );
 
-console.log(smallCube.material.color);
-console.log(cube.geometry.faces[1].color);
+//console.log(smallCube.material.color);
+//console.log(cube.geometry.faces[1].color);
 
 }
 
@@ -161,7 +167,7 @@ camera.position.z = 7;
 render();
 */
 
-console.log(canvas.childNodes);
+//console.log(canvas.childNodes);
 
 
 canvas.addEventListener('mousedown', onDocumentMouseDown, false);
@@ -172,10 +178,22 @@ animate();
 }
 
 
+
 //copy of mouse move from rotationbox with configs
 function onDocumentMouseDown(event) {
+    /*var cubeVector = (new THREE.Vector3( 0, 0, 1 )).applyQuaternion(cube.quaternion);
+    var cameraVector = (new THREE.Vector3( 0, 0, -1 )).applyQuaternion(camera.quaternion );
+    console.log(cubeVector);
+
+    if (cubeVector.angleTo(cameraVector) > Math.PI/4 && cubeVector.angleTo(cameraVector) < 0.75 *Math.PI  )  {
+    console.log('facing front');
+}
+
+    //else 'facing back'
+    */
     event.preventDefault();
 
+    //console.log(scene.children);
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
@@ -183,12 +201,14 @@ function onDocumentMouseDown(event) {
     var intersects = raycaster.intersectObjects(scene.children);
 
     if (intersects.length > 0) {
-
+        //var TESTI = intersects[0].face.materialIndex;
         SELECTED = intersects[0].object;
+        //console.log(TESTI);
+
 
         if (SELECTED.name == 'Big cube') {
 
-            console.log(SELECTED);
+            //console.log(SELECTED);
             document.getElementById("canvas").addEventListener('mousemove', onDocumentMouseMove, false);
             document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp, false);
 
@@ -206,8 +226,13 @@ function onDocumentMouseDown(event) {
                 x: event.clientX,
                 y: event.clientY
             };
+            //if (SELECTED.material.color)
+
+            //console.log(SELECTED.material.color);
+            selectedColor = intersects[ 0 ].face.materialIndex;
+            //console.log(selectedColor);
             mouseDown = true;
-        console.log(startPoint);
+        //console.log(startPoint);
         console.log(SELECTED);
 
         document.getElementById("canvas").addEventListener('mousemove', MoveCube, false);
@@ -258,7 +283,7 @@ function onDocumentMouseDown(event) {
                     var intersects = raycaster.intersectObject( plane, cube );
                     if ( intersects.length > 0 ) {
                         SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
-                        matchNRemove(SELECTED, cube);
+                        //matchNRemove(SELECTED, cube);
                     }
                     
                     return;
@@ -267,7 +292,7 @@ function onDocumentMouseDown(event) {
                 var intersects = raycaster.intersectObjects( scene.children, true );
 
                 if ( intersects.length > 0) {
-                    console.log('nu krockar grjer');
+                    //console.log('nu krockar grjer');
                     
                     /*
                     if ( INTERSECTED != intersects[ 0 ].object ) {
@@ -289,17 +314,78 @@ function onDocumentMouseDown(event) {
     }
 
     function onDocumentMouseUp2( event ) {
-                event.preventDefault();
-                /*
-                controls.enabled = true;
-                if ( INTERSECTED ) {
-                    plane.position.copy( INTERSECTED.position );
-                    SELECTED = null;
-                }
-                //container.style.cursor = 'auto';
-                */
-                SELECTED = null;
+        event.preventDefault();
+        raycaster2.setFromCamera(mouse, camera);
+        var bigCubeCurrent = raycaster2.intersectObjects(scene.children);
+        var bigCubeFace = bigCubeCurrent[ 0 ].face.materialIndex;
+       // console.log(bigCubeCurrent);
+        //console.log(bigCubeFace);
+        //console.log(selectedColor);
+
+        if ( SELECTED.name != 'Big cube' ) {
+            var xyPos = {
+                x: SELECTED.position.x,
+                y: SELECTED.position.y
+            };
+            /*
+             controls.enabled = true;
+             if ( INTERSECTED ) {
+             plane.position.copy( INTERSECTED.position );
+             SELECTED = null;
+             }
+             //container.style.cursor = 'auto';
+             */
+            //SELECTED = null;
+            if (xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1 ) {
+                matchSmallWithBig(bigCubeFace, SELECTED);
+                //xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1
+                //matchNRemove(SELECTED, cube);
+
+               // console.log("WE HAVE LIFTOFF");
+                //scene.remove(SELECTED);
+
             }
+        }
+    }
+    function matchSmallWithBig (bigCubeFace, SELECTED) {
+        var smallR = Math.round(SELECTED.material.color.r *10);
+        var smallG = Math.round(SELECTED.material.color.g *10);
+        var smallB = Math.round(SELECTED.material.color.b *10);
+
+        if (SELECTED.name != 'Big cube') {
+            if (smallR == 7 && smallB == 2 && smallG == 2) {
+                if (bigCubeFace == 0) {
+                    scene.remove(SELECTED);
+                }
+            }
+            if (smallR == 7 && smallB == 7 && smallG == 2) {
+                if (bigCubeFace == 1) {
+                    scene.remove(SELECTED);
+                }
+            }
+            if (smallR == 2 && smallB == 7 && smallG == 2) {
+                if (bigCubeFace == 2) {
+                    scene.remove(SELECTED);
+                }
+            }
+            if (smallR == 2 && smallB == 7 && smallG == 7) {
+                if (bigCubeFace == 3) {
+                    scene.remove(SELECTED);
+                }
+            }
+            if (smallR == 2 && smallB == 2 && smallG == 7) {
+                if (bigCubeFace == 4) {
+                    scene.remove(SELECTED);
+                }
+            }
+            if (smallR == 7 && smallB == 2 && smallG == 7) {
+                if (bigCubeFace == 5) {
+                    scene.remove(SELECTED);
+                }
+            }
+        }
+
+    }
 
     function newCubePosition(event) {
         if (new Date().getTime() - lastMoveTimestamp.getTime() > moveReleaseTimeDelta) {
@@ -354,7 +440,7 @@ function onDocumentMouseDown(event) {
         
 
         if ((cR - 1 <= sR && sR <= cR + 1) && (cB - 1 <= sB && sB <= cB + 1) && (cG - 1 <= sG && sG <= cG + 1)) {
-            console.log('Sant!');
+            //console.log('Sant!');
             scene.remove(SELECTED);
         }
         }
