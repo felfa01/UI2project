@@ -346,7 +346,7 @@ function onDocumentMouseDown(event) {
                 matchSmallWithBig(bigCubeFace, SELECTED);
                 //xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1
                 //matchNRemove(SELECTED, cube);
-                SELECTED = null;
+
 
                // console.log("WE HAVE LIFTOFF");
                 //scene.remove(SELECTED);
@@ -366,36 +366,42 @@ function onDocumentMouseDown(event) {
                 if (bigCubeFace == 0) {
                     scene.remove(SELECTED);
                     console.log('Small Cube Removed');
+                    SELECTED = null;
                 }
             }
             if (smallR == 7 && smallG == 7 && smallB == 2) {
                 if (bigCubeFace == 1) {
                     scene.remove(SELECTED);
                     console.log('Small Cube Removed');
+                    SELECTED = null;
                 }
             }
             if (smallR == 2 && smallG == 7 && smallB == 2) {
                 if (bigCubeFace == 2) {
                     scene.remove(SELECTED);
                     console.log('Small Cube Removed');
+                    SELECTED = null;
                 }
             }
             if (smallR == 2 && smallG == 7 && smallB == 7) {
                 if (bigCubeFace == 3) {
                     scene.remove(SELECTED);
                     console.log('Small Cube Removed');
+                    SELECTED = null;
                 }
             }
             if (smallR == 2 && smallG == 2 && smallB == 7) {
                 if (bigCubeFace == 4) {
                     scene.remove(SELECTED);
                     console.log('Small Cube Removed');
+                    SELECTED = null;
                 }
             }
             if (smallR == 7 && smallG == 2 && smallB == 7) {
                 if (bigCubeFace == 5) {
                     scene.remove(SELECTED);
                     console.log('Small Cube Removed');
+                    SELECTED = null;
                 }
             }
         }
@@ -423,6 +429,7 @@ function onDocumentMouseDown(event) {
         }
 
         mouseDown = false;
+
 
         document.getElementById("canvas").removeEventListener('mousemove', onDocumentMouseMove, false);
         document.getElementById("canvas").removeEventListener('mouseup', onDocumentMouseUp, false);
