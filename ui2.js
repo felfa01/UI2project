@@ -277,25 +277,28 @@ function onDocumentMouseDown(event) {
                 //
                 raycaster.setFromCamera( mouse, camera );
 
-                if (SELECTED != null){
+                if (SELECTED != null) {
 
-                if ( SELECTED.name != 'Big cube' ) {
-                    var intersects = raycaster.intersectObject( plane, cube );
-                    if ( intersects.length > 0 ) {
-                        SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
-                        //matchNRemove(SELECTED, cube);
-                        console.log('Mouse Move Small Cubes');
+                    if (SELECTED.name != 'Big cube') {
+                        var intersects = raycaster.intersectObject(plane, cube);
+                        if (intersects.length > 0) {
+                            SELECTED.position.copy(intersects[0].point.sub(offset));
+                            //matchNRemove(SELECTED, cube);
+                            console.log('Mouse Move Small Cubes');
+
+                        }
+
+                        return;
+
                     }
-                    
                     return;
-
                 }
-                var intersects = raycaster.intersectObjects( scene.children, true );
+                /*var intersects = raycaster.intersectObjects( scene.children, true );
 
                 if ( intersects.length > 0) {
                     //console.log('nu krockar grjer');
                     
-                    /*
+
                     if ( INTERSECTED != intersects[ 0 ].object ) {
                         if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
                         INTERSECTED = intersects[ 0 ].object;
@@ -303,14 +306,14 @@ function onDocumentMouseDown(event) {
                         plane.position.copy( INTERSECTED.position );
                         plane.lookAt( camera.position );
                     }
-                    */
+
                     canvas.style.cursor = 'pointer';
                 } else {
                     if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
                     INTERSECTED = null;
                     canvas.style.cursor = 'auto';
                 }
-            }
+            } */
             //}
     }
 
@@ -343,12 +346,14 @@ function onDocumentMouseDown(event) {
                 matchSmallWithBig(bigCubeFace, SELECTED);
                 //xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1
                 //matchNRemove(SELECTED, cube);
+                SELECTED = null;
 
                // console.log("WE HAVE LIFTOFF");
                 //scene.remove(SELECTED);
 
 
             }
+
         }
     }
     function matchSmallWithBig (bigCubeFace, SELECTED) {
@@ -394,6 +399,7 @@ function onDocumentMouseDown(event) {
                 }
             }
         }
+
 
     }
 
