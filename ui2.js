@@ -208,7 +208,7 @@ function onDocumentMouseDown(event) {
 
         if (SELECTED.name == 'Big cube') {
 
-            //console.log(SELECTED);
+            console.log('Mouse Down IF Big Cube');
             document.getElementById("canvas").addEventListener('mousemove', onDocumentMouseMove, false);
             document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp, false);
 
@@ -228,12 +228,12 @@ function onDocumentMouseDown(event) {
             };
             //if (SELECTED.material.color)
 
-            //console.log(SELECTED.material.color);
+            console.log('Mouse Down IF Small Cubes');
             selectedColor = intersects[ 0 ].face.materialIndex;
             //console.log(selectedColor);
             mouseDown = true;
         //console.log(startPoint);
-        console.log(SELECTED);
+        //console.log(SELECTED);
 
         document.getElementById("canvas").addEventListener('mousemove', MoveCube, false);
         document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp2, false);
@@ -245,7 +245,7 @@ function onDocumentMouseDown(event) {
     function onDocumentMouseMove(event) {
         deltaX = event.x - startPoint.x;
         deltaY = event.y - startPoint.y;
-
+        console.log('Mouse Move Big Cube')
         handleRotation();
 
         startPoint.x = event.x;
@@ -284,6 +284,7 @@ function onDocumentMouseDown(event) {
                     if ( intersects.length > 0 ) {
                         SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
                         //matchNRemove(SELECTED, cube);
+                        console.log('Mouse Move Small Cubes');
                     }
                     
                     return;
@@ -327,6 +328,7 @@ function onDocumentMouseDown(event) {
                 x: SELECTED.position.x,
                 y: SELECTED.position.y
             };
+            console.log('Mouse Up Small Cubes');
             /*
              controls.enabled = true;
              if ( INTERSECTED ) {
@@ -337,12 +339,14 @@ function onDocumentMouseDown(event) {
              */
             //SELECTED = null;
             if (xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1 ) {
+                console.log('we are in xyPos IF');
                 matchSmallWithBig(bigCubeFace, SELECTED);
                 //xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1
                 //matchNRemove(SELECTED, cube);
 
                // console.log("WE HAVE LIFTOFF");
                 //scene.remove(SELECTED);
+
 
             }
         }
@@ -353,34 +357,40 @@ function onDocumentMouseDown(event) {
         var smallB = Math.round(SELECTED.material.color.b *10);
 
         if (SELECTED.name != 'Big cube') {
-            if (smallR == 7 && smallB == 2 && smallG == 2) {
+            if (smallR == 7 && smallG == 2 && smallB == 2) {
                 if (bigCubeFace == 0) {
                     scene.remove(SELECTED);
+                    console.log('Small Cube Removed');
                 }
             }
-            if (smallR == 7 && smallB == 7 && smallG == 2) {
+            if (smallR == 7 && smallG == 7 && smallB == 2) {
                 if (bigCubeFace == 1) {
                     scene.remove(SELECTED);
+                    console.log('Small Cube Removed');
                 }
             }
-            if (smallR == 2 && smallB == 7 && smallG == 2) {
+            if (smallR == 2 && smallG == 7 && smallB == 2) {
                 if (bigCubeFace == 2) {
                     scene.remove(SELECTED);
+                    console.log('Small Cube Removed');
                 }
             }
-            if (smallR == 2 && smallB == 7 && smallG == 7) {
+            if (smallR == 2 && smallG == 7 && smallB == 7) {
                 if (bigCubeFace == 3) {
                     scene.remove(SELECTED);
+                    console.log('Small Cube Removed');
                 }
             }
-            if (smallR == 2 && smallB == 2 && smallG == 7) {
+            if (smallR == 2 && smallG == 2 && smallB == 7) {
                 if (bigCubeFace == 4) {
                     scene.remove(SELECTED);
+                    console.log('Small Cube Removed');
                 }
             }
-            if (smallR == 7 && smallB == 2 && smallG == 7) {
+            if (smallR == 7 && smallG == 2 && smallB == 7) {
                 if (bigCubeFace == 5) {
                     scene.remove(SELECTED);
+                    console.log('Small Cube Removed');
                 }
             }
         }
