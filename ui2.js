@@ -128,6 +128,7 @@ smallCube = new THREE.Mesh( figures[Math.floor(Math.random() * figures.length)],
 
 smallCube.position.y = -3;
 smallCube.position.x = i*3 - 3;
+
     //console.log(cube);
 //cube.rotation.x = 0;
   //  cube.rotation.y = 0;
@@ -285,6 +286,7 @@ function onDocumentMouseDown(event) {
             console.log(offset);
             */
             //lastMoveTimestamp = new Date();
+
             event.preventDefault();
                 mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
                 mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
