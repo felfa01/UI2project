@@ -26,6 +26,9 @@ var Y = 0,
 var tada = new Audio("audio/tada.mp3");
 var no = new Audio("audio/no.mp3");
 
+var tutorialSpin = 1;
+var tutorialDrag = 1;
+
 var cubeColor = [];
 var raycaster2 = new THREE.Raycaster();
 var raycaster = new THREE.Raycaster();
@@ -251,6 +254,14 @@ function onDocumentMouseDown(event) {
         console.log('Mouse Move Big Cube')
         handleRotation();
 
+        $('#blink-arrow').hide();
+        $('#rotate-text').hide();
+        if (tutorialSpin) {
+          $('#jumping-text').show();
+          $('#jumping-arrow').show();
+          tutorialSpin = 0;
+        }
+
         startPoint.x = event.x;
         startPoint.y = event.y;
 
@@ -287,6 +298,13 @@ function onDocumentMouseDown(event) {
                         if (intersects.length > 0) {
                             SELECTED.position.copy(intersects[0].point.sub(offset));
                             //matchNRemove(SELECTED, cube);
+                            $('#jumping-text').hide();
+                            $('#jumping-arrow').hide();
+                            if(tutorialDrag) {
+                              $('#drop-text').show();
+                              $('#drop-arrow').show();
+                              tutorialDrag = 0;
+                            }
                             console.log('Mouse Move Small Cubes');
 
                         }
@@ -360,6 +378,12 @@ function onDocumentMouseDown(event) {
 
         }
     }
+
+    function hideDropElements() {
+      $('#drop-arrow').hide();
+      $('#drop-text').hide();
+    }
+
     function matchSmallWithBig (bigCubeFace, SELECTED) {
         var smallR = Math.round(SELECTED.material.color.r *10);
         var smallG = Math.round(SELECTED.material.color.g *10);
@@ -371,6 +395,7 @@ function onDocumentMouseDown(event) {
                 if (bigCubeFace == 0) {
                     scene.remove(SELECTED);
                     tada.play();
+                    hideDropElements();
                     console.log('Small Cube Removed');
                     SELECTED = null;
                 }
@@ -382,6 +407,7 @@ function onDocumentMouseDown(event) {
                 if (bigCubeFace == 1) {
                     scene.remove(SELECTED);
                     tada.play();
+                    hideDropElements();
                     console.log('Small Cube Removed');
                     SELECTED = null;
                 }
@@ -393,6 +419,7 @@ function onDocumentMouseDown(event) {
                 if (bigCubeFace == 2) {
                     scene.remove(SELECTED);
                     tada.play();
+                    hideDropElements();
                     console.log('Small Cube Removed');
                     SELECTED = null;
                 }
@@ -404,6 +431,7 @@ function onDocumentMouseDown(event) {
                 if (bigCubeFace == 3) {
                     scene.remove(SELECTED);
                     tada.play();
+                    hideDropElements();
                     console.log('Small Cube Removed');
                     SELECTED = null;
                 }
@@ -415,6 +443,7 @@ function onDocumentMouseDown(event) {
                 if (bigCubeFace == 4) {
                     scene.remove(SELECTED);
                     tada.play();
+                    hideDropElements();
                     console.log('Small Cube Removed');
                     SELECTED = null;
                 }
@@ -426,6 +455,7 @@ function onDocumentMouseDown(event) {
                 if (bigCubeFace == 5) {
                     scene.remove(SELECTED);
                     tada.play();
+                    hideDropElements();
                     console.log('Small Cube Removed');
                     SELECTED = null;
                 }

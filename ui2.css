@@ -15,3 +15,121 @@ body{
 	background-size: cover;
 	background-image: url(images/childrens-wallpaper-mobile.jpg);
 }
+
+p {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-size: 200%;
+}
+
+#rotate-text {
+  width: 50%;
+  height: 5%;
+  left: 30%;
+  top: 10%;
+  position: absolute;
+}
+
+#blink-arrow {
+  content:url("images/blinkarrow.png");
+  width: 0;
+  height: 0;
+  top: 15%;
+  left: 35%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transform: rotate(-25deg);
+  -webkit-animation-name: blink;
+  -webkit-animation-duration: 1s;
+  -webkit-transform: rotate(-25deg);
+  -webkit-animation-iteration-count:infinite;
+  animation-name: blink;
+  animation-duration: 1s;
+  animation-iteration-count:infinite;
+}
+
+@-webkit-keyframes blink {
+  0%    {width: 10%; height: 20%;}
+  50%   {width: 15%; height: 25%;}
+  100%  {width: 10%; height: 20%;}
+}
+
+@keyframes blink {
+  0%    {width: 10%; height: 20%;}
+  50%   {width: 15%; height: 25%;}
+  100%  {width: 10%; height: 20%;}
+}
+
+#jumping-text {
+  width: 20%;
+  height: 5%;
+  left: 20%;
+  top: 25%;
+  position: absolute;
+  display: none;
+}
+
+#jumping-arrow {
+  content:url("images/jumpingarrow.png");
+  width: 10%;
+  height: 20%;
+  top: 0;
+  left: 33%;
+  position: absolute;
+  -webkit-animation-name: jump;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count:infinite;
+  animation-name: jump;
+  animation-duration: 1s;
+  animation-iteration-count:infinite;
+  display: none;
+}
+
+@-webkit-keyframes jump {
+  0%    {top: 45%;}
+  50%   {top: 50%;}
+  100%  {top: 45%;}
+}
+
+@keyframes jump {
+  0%    {top: 45%;}
+  50%   {top: 50%;}
+  100%  {top: 45%;}
+}
+
+#drop-arrow {
+  content:url("images/jumpingarrow.png");
+  width: 10%;
+  height: 20%;
+  top: 45%;
+  position: absolute;
+  transform: rotate(90deg);
+  -webkit-animation-name: slide;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-transform: rotate(90deg);
+  -webkit-animation-iteration-count:infinite;
+  animation-name: slide;
+  animation-duration: 1s;
+  animation-iteration-count:infinite;
+  display: none;
+}
+
+@-webkit-keyframes slide {
+  0%    {right: 27%;}
+  50%   {right: 32%;}
+  100%  {right: 27%;}
+}
+
+@keyframes slide {
+  0%    {right: 27%;}
+  50%   {right: 32%;}
+  100%  {right: 27%;}
+}
+
+#drop-text {
+  width: 20%;
+  height: 10%;
+  top: 15%;
+  right: 18%;
+  position: absolute;
+  display: none;
+}
