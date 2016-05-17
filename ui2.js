@@ -23,10 +23,13 @@ var deltaX = 0,
 var Y = 0,
     X = 0;
 
+var tada = new Audio("audio/tada.mp3");
+var no = new Audio("audio/no.mp3");
+
 var cubeColor = [];
 var raycaster2 = new THREE.Raycaster();
 var raycaster = new THREE.Raycaster();
-var mouse = new THREE.Vector2(), 
+var mouse = new THREE.Vector2(),
 offset = new THREE.Vector3(),
 INTERSECTED, SELECTED, selectedColor;
 
@@ -36,7 +39,7 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeig
 
 //function for adding scen & figures
 
-function init() { 
+function init() {
 
 var canvas = document.getElementById("canvas");
 
@@ -64,7 +67,7 @@ var geometry = new THREE.BoxGeometry( 2.5, 2.5, 2.5 );
 
 for (var i = 0; i < geometry.faces.length; i += 2) {
 
-            var color = 
+            var color =
 
             {
                 h: (1 / (geometry.faces.length)) * i,
@@ -109,12 +112,12 @@ var figures = [smallBox, smallSphere, smallTorus];
 
 for (var i = 0; i < 3; i++){
 
-    var smallCubeMaterial = new THREE.MeshBasicMaterial( 
-    { 
+    var smallCubeMaterial = new THREE.MeshBasicMaterial(
+    {
         //color: colors[i],
         //color: colors[Math.floor(Math.random() * colors.length)],
         color: cubeColor[Math.floor(Math.random() * cubeColor.length)],
-        overdraw: 0.5 
+        overdraw: 0.5
     });
 
 smallCube = new THREE.Mesh( figures[Math.floor(Math.random() * figures.length)], smallCubeMaterial );
@@ -136,7 +139,7 @@ scene.add( smallCube );
 }
 
 
-/*                
+/*
                 for ( var i = 0; i < 3; i ++ ) {
                     var object = new THREE.Mesh( smallGeometry, cubeMaterial );
                     //object.position.x = 0;
@@ -157,7 +160,7 @@ scene.add( plane );
 camera.position.z = 7;
 
 /*
-//reder function from before adding rotationBox code. 
+//reder function from before adding rotationBox code.
  render = function () {
 	requestAnimationFrame( render );
 
@@ -297,7 +300,7 @@ function onDocumentMouseDown(event) {
 
                 if ( intersects.length > 0) {
                     //console.log('nu krockar grjer');
-                    
+
 
                     if ( INTERSECTED != intersects[ 0 ].object ) {
                         if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
@@ -367,44 +370,67 @@ function onDocumentMouseDown(event) {
             if (smallR == 7 && smallG == 2 && smallB == 2) {
                 if (bigCubeFace == 0) {
                     scene.remove(SELECTED);
+                    tada.play();
                     console.log('Small Cube Removed');
                     SELECTED = null;
-
+                }
+                else {
+                  no.play();
                 }
             }
             if (smallR == 7 && smallG == 7 && smallB == 2) {
                 if (bigCubeFace == 1) {
                     scene.remove(SELECTED);
+                    tada.play();
                     console.log('Small Cube Removed');
                     SELECTED = null;
+                }
+                else {
+                  no.play();
                 }
             }
             if (smallR == 2 && smallG == 7 && smallB == 2) {
                 if (bigCubeFace == 2) {
                     scene.remove(SELECTED);
+                    tada.play();
                     console.log('Small Cube Removed');
                     SELECTED = null;
+                }
+                else {
+                  no.play();
                 }
             }
             if (smallR == 2 && smallG == 7 && smallB == 7) {
                 if (bigCubeFace == 3) {
                     scene.remove(SELECTED);
+                    tada.play();
                     console.log('Small Cube Removed');
                     SELECTED = null;
+                }
+                else {
+                  no.play();
                 }
             }
             if (smallR == 2 && smallG == 2 && smallB == 7) {
                 if (bigCubeFace == 4) {
                     scene.remove(SELECTED);
+                    tada.play();
                     console.log('Small Cube Removed');
                     SELECTED = null;
+                }
+                else {
+                  no.play();
                 }
             }
             if (smallR == 7 && smallG == 2 && smallB == 7) {
                 if (bigCubeFace == 5) {
                     scene.remove(SELECTED);
+                    tada.play();
                     console.log('Small Cube Removed');
                     SELECTED = null;
+                }
+                else {
+                  no.play();
                 }
             }
         }
@@ -439,7 +465,7 @@ function onDocumentMouseDown(event) {
     }
 
     function matchNRemove( SELECTED, cube ) {
-        
+
         if (SELECTED != null){
 
         if (SELECTED.name != 'Big cube') {
@@ -463,7 +489,7 @@ function onDocumentMouseDown(event) {
 
             //console.log('c');
             //console.log(cColor);
-        
+
 
         if ((cR - 1 <= sR && sR <= cR + 1) && (cB - 1 <= sB && sB <= cB + 1) && (cG - 1 <= sG && sG <= cG + 1)) {
             //console.log('Sant!');
