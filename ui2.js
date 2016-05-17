@@ -341,7 +341,8 @@ function onDocumentMouseDown(event) {
              //container.style.cursor = 'auto';
              */
             //SELECTED = null;
-            if (xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1 ) {
+            if (bigCubeFace != 0 ) {
+                //xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1
                 console.log('we are in xyPos IF');
                 matchSmallWithBig(bigCubeFace, SELECTED);
                 //xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1
@@ -360,6 +361,7 @@ function onDocumentMouseDown(event) {
         var smallR = Math.round(SELECTED.material.color.r *10);
         var smallG = Math.round(SELECTED.material.color.g *10);
         var smallB = Math.round(SELECTED.material.color.b *10);
+        console.log('matchSmall but not in IF');
 
         if (SELECTED.name != 'Big cube') {
             if (smallR == 7 && smallG == 2 && smallB == 2) {
@@ -367,6 +369,7 @@ function onDocumentMouseDown(event) {
                     scene.remove(SELECTED);
                     console.log('Small Cube Removed');
                     SELECTED = null;
+
                 }
             }
             if (smallR == 7 && smallG == 7 && smallB == 2) {
