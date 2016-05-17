@@ -300,7 +300,7 @@ function onDocumentMouseDown(event) {
                             //matchNRemove(SELECTED, cube);
                             $('#jumping-text').hide();
                             $('#jumping-arrow').hide();
-                            if(tutorialDrag) {
+                            if(tutorialDrag && !tutorialSpin) {
                               $('#drop-text').show();
                               $('#drop-arrow').show();
                               tutorialDrag = 0;
