@@ -343,13 +343,13 @@ function onDocumentMouseDown(event) {
     function onDocumentMouseUp2( event ) {
         event.preventDefault();
         raycaster2.setFromCamera(mouse, camera);
-        var bigCubeCurrent = raycaster2.intersectObjects(scene.children);
-        var bigCubeFace = bigCubeCurrent[ 0 ].face.materialIndex;
+        var bigCubeRay = raycaster2.intersectObjects(scene.children);
+        var bigCubeFace = bigCubeRay[ 0 ].face.materialIndex;
        // console.log(bigCubeCurrent);
         //console.log(bigCubeFace);
         //console.log(selectedColor);
 
-        if ( SELECTED.name != 'Big cube' ) {
+        if ( SELECTED.name != 'Big cube') {
             var xyPos = {
                 x: SELECTED.position.x,
                 y: SELECTED.position.y
@@ -365,8 +365,10 @@ function onDocumentMouseDown(event) {
              */
             //SELECTED = null;
             if (bigCubeFace != 0 ) {
+
                 //xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1
                 console.log('we are in xyPos IF');
+                console.log(bigCubeFace);
                 matchSmallWithBig(bigCubeFace, SELECTED);
                 //xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1
                 //matchNRemove(SELECTED, cube);
@@ -377,7 +379,9 @@ function onDocumentMouseDown(event) {
 
 
             }
-
+            else {
+                SELECTED = null;
+            }
         }
     }
 
@@ -392,7 +396,7 @@ function onDocumentMouseDown(event) {
         var smallB = Math.round(SELECTED.material.color.b *10);
         console.log('matchSmall but not in IF');
 
-        if (SELECTED.name != 'Big cube') {
+        if (SELECTED.name != 'Big cube' && SELECTED != null) {
             if (smallR == 7 && smallG == 2 && smallB == 2) {
                 if (bigCubeFace == 0) {
                     scene.remove(SELECTED);
