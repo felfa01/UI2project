@@ -120,7 +120,9 @@ for (var i = 0; i < 3; i++){
         //color: colors[i],
         //color: colors[Math.floor(Math.random() * colors.length)],
         color: cubeColor[Math.floor(Math.random() * cubeColor.length)],
-        overdraw: 0.5
+        overdraw: 0.5,
+        wireframe: true,
+        wireframeLinewidth: 10
     });
 //Put togheter the smaller figures with the created geometry and material
 smallCube = new THREE.Mesh( figures[Math.floor(Math.random() * figures.length)], smallCubeMaterial );
@@ -128,6 +130,7 @@ smallCube = new THREE.Mesh( figures[Math.floor(Math.random() * figures.length)],
 //Assign the smaller figures position to be slightly below the bigger cube.
 smallCube.position.y = -3;
 smallCube.position.x = i*3 - 3;
+smallCube.position.z = 1;
 
     //console.log(cube);
 //cube.rotation.x = 0;
@@ -135,12 +138,10 @@ smallCube.position.x = i*3 - 3;
     //cube.rotation.z = 0;
 //Assign a non-unique name to the smaller cubes, this to distinguish them from the larger cube.
 smallCube.name = 'Small cubes';
-smallCube.wireframe = true;
-smallCube.wireframeLinewidth = 2;
-edges = new THREE.EdgesHelper( smallCube, 0x000000 );
+
 // Add the small cubes to the scene
 scene.add( smallCube );
-scene.add( edges );
+
 
 //console.log(smallCube.material.color);
 //console.log(cube.geometry.faces[1].color);
@@ -161,12 +162,13 @@ scene.add( edges );
 */
 //Initialize plane, it is not visible but needed for our objects to move correctly. Also add it to scene.
 plane = new THREE.Mesh(
-                    new THREE.PlaneBufferGeometry( 2000, 2000, 8, 8 ),
+                    new THREE.PlaneBufferGeometry( 2000, 2000, 5, 5 ),
                     new THREE.MeshBasicMaterial( { visible: false } )
                     );
+plane.name = "plane";
 scene.add( plane );
 //Set camera position, higher value indicates looking at our scene from further distance
-camera.position.z = 7;
+camera.position.z = 8;
 
 /*
 //reder function from before adding rotationBox code.
@@ -373,7 +375,9 @@ function onDocumentMouseDown(event) {
              //container.style.cursor = 'auto';
              */
             //SELECTED = null;
-            if (bigCubeFace != 0 ) {
+            console.log(SELECTED);
+            console.log(bigCubeFace);
+            if (bigCubeFace != null && SELECTED != null && SELECTED.name == "Small cubes") {
 
                 //xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1
                 console.log('we are in xyPos IF');
@@ -404,7 +408,9 @@ function onDocumentMouseDown(event) {
         var smallG = Math.round(SELECTED.material.color.g *10);
         var smallB = Math.round(SELECTED.material.color.b *10);
         console.log('matchSmall but not in IF');
-
+        console.log(smallR);
+        console.log(smallG);
+        console.log(smallB);
         if (SELECTED.name != 'Big cube' && SELECTED != null) {
             if (smallR == 7 && smallG == 2 && smallB == 2) {
                 if (bigCubeFace == 0) {
