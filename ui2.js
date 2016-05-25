@@ -30,6 +30,8 @@ var tutorialSpin = 1;
 var tutorialDrag = 1;
 //Cube and Raycaster.js variables
 var cubeColor = [];
+var bigCubeFace = null;
+var bigCubeRay = null;
 var raycaster2 = new THREE.Raycaster();
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2(),
@@ -98,6 +100,8 @@ var cubeMaterial = new THREE.MeshBasicMaterial(
 //Put togheter the final cube, with its geometry and the material put onto the geometry.
 cube = new THREE.Mesh( geometry, cubeMaterial );
 cube.name = "Big cube";
+cube.geometry.faces[0].materialIndex = 6;
+cube.geometry.faces[1].materialIndex = 6;
 //Add the cube to our scene
 scene.add( cube );
 
@@ -162,7 +166,7 @@ scene.add( smallCube );
 */
 //Initialize plane, it is not visible but needed for our objects to move correctly. Also add it to scene.
 plane = new THREE.Mesh(
-                    new THREE.PlaneBufferGeometry( 2000, 2000, 5, 5 ),
+                    new THREE.PlaneBufferGeometry( 2000, 2000, 8, 8 ),
                     new THREE.MeshBasicMaterial( { visible: false } )
                     );
 plane.name = "plane";
@@ -184,6 +188,7 @@ render();
 //console.log(canvas.childNodes);
 
 //Adding event listeners, in initialize phase only mousedown event is needed, the other events are triggered after a mousedown
+canvas.addEventListener('mouseup', onDocumentMouseUp, false);
 canvas.addEventListener('mousedown', onDocumentMouseDown, false);
 //canvas.addEventListener('mousemove', onDocumentMouseMove, false);
 //canvas.addEventListener('mouseup', onDocumentMouseUp2, false);
@@ -305,7 +310,7 @@ function onDocumentMouseDown(event) {
 
                 if (SELECTED != null) {
 
-                    if (SELECTED.name != 'Big cube') {
+                    if (SELECTED.name == 'Small cubes') {
                         var intersects = raycaster.intersectObject(plane, cube);
                         if (intersects.length > 0) {
                             SELECTED.position.copy(intersects[0].point.sub(offset));
@@ -318,14 +323,14 @@ function onDocumentMouseDown(event) {
                               tutorialDrag = 0;
                             }
                             console.log('Mouse Move Small Cubes');
-
-
+                            document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp2, false);
+                        
                         }
-
-                        return;
-
+                        
+                        
                     }
-                    return;
+                   
+                    
                 }
                 /*var intersects = raycaster.intersectObjects( scene.children, true );
 
@@ -349,18 +354,17 @@ function onDocumentMouseDown(event) {
                 }
             } */
             //}
+            
     }
 
     function onDocumentMouseUp2( event ) {
         event.preventDefault();
-        raycaster2.setFromCamera(mouse, camera);
-        var bigCubeRay = raycaster2.intersectObjects(scene.children);
-        var bigCubeFace = bigCubeRay[ 0 ].face.materialIndex;
+        bigCubeFace = null;
        // console.log(bigCubeCurrent);
         //console.log(bigCubeFace);
         //console.log(selectedColor);
 
-        if ( SELECTED.name != 'Big cube') {
+        if ( SELECTED.name == 'Small cubes') {
             var xyPos = {
                 x: SELECTED.position.x,
                 y: SELECTED.position.y
@@ -377,7 +381,14 @@ function onDocumentMouseDown(event) {
             //SELECTED = null;
             console.log(SELECTED);
             console.log(bigCubeFace);
-            if (bigCubeFace != null && SELECTED != null && SELECTED.name == "Small cubes") {
+            
+            raycaster2.setFromCamera(mouse, camera);
+            console.log(raycaster2);
+            bigCubeRay = raycaster2.intersectObjects(scene.children);
+            console.log(bigCubeRay);
+            bigCubeFace = bigCubeRay[ 0 ].face.materialIndex;
+            
+            if ((bigCubeFace >= 1 && bigCubeFace <= 6) && SELECTED != null && SELECTED.name == "Small cubes") {
 
                 //xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1
                 console.log('we are in xyPos IF');
@@ -394,6 +405,7 @@ function onDocumentMouseDown(event) {
             }
             else {
                 SELECTED = null;
+                bigCubeFace = null;
             }
         }
     }
@@ -411,17 +423,20 @@ function onDocumentMouseDown(event) {
         console.log(smallR);
         console.log(smallG);
         console.log(smallB);
-        if (SELECTED.name != 'Big cube' && SELECTED != null) {
+        console.log(SELECTED);
+        if (SELECTED.name == 'Small cubes' && SELECTED != null) {
             if (smallR == 7 && smallG == 2 && smallB == 2) {
-                if (bigCubeFace == 0) {
+                if (bigCubeFace == 6) {
                     scene.remove(SELECTED);
                     tada.play();
                     hideDropElements();
                     console.log('Small Cube Removed');
                     SELECTED = null;
+                    bigCubeFace = null;
                 }
                 else {
                   SELECTED = null;
+                  bigCubeFace = null;
                   no.play();
                 }
             }
@@ -432,10 +447,12 @@ function onDocumentMouseDown(event) {
                     hideDropElements();
                     console.log('Small Cube Removed');
                     SELECTED = null;
+                    bigCubeFace = null;
                 }
                 else {
                   no.play();
                   SELECTED = null;
+                  bigCubeFace = null;
                 }
             }
             if (smallR == 2 && smallG == 7 && smallB == 2) {
@@ -445,10 +462,12 @@ function onDocumentMouseDown(event) {
                     hideDropElements();
                     console.log('Small Cube Removed');
                     SELECTED = null;
+                    bigCubeFace = null;
                 }
                 else {
                   no.play();
                   SELECTED = null;
+                  bigCubeFace = null;
                 }
             }
             if (smallR == 2 && smallG == 7 && smallB == 7) {
@@ -458,10 +477,12 @@ function onDocumentMouseDown(event) {
                     hideDropElements();
                     console.log('Small Cube Removed');
                     SELECTED = null;
+                    bigCubeFace = null;
                 }
                 else {
                   no.play();
                   SELECTED = null;
+                  bigCubeFace = null;
                 }
             }
             if (smallR == 2 && smallG == 2 && smallB == 7) {
@@ -471,10 +492,12 @@ function onDocumentMouseDown(event) {
                     hideDropElements();
                     console.log('Small Cube Removed');
                     SELECTED = null;
+                    bigCubeFace = null;
                 }
                 else {
                   no.play();
                   SELECTED = null;
+                  bigCubeFace = null;
                 }
             }
             if (smallR == 7 && smallG == 2 && smallB == 7) {
@@ -484,16 +507,21 @@ function onDocumentMouseDown(event) {
                     hideDropElements();
                     console.log('Small Cube Removed');
                     SELECTED = null;
+                    bigCubeFace = null;
                 }
                 else {
                   no.play();
                   SELECTED = null;
+                  bigCubeFace = null;
                 }
             }
         }
-
-
-    }
+    console.log("removed box");
+    SELECTED = null;
+    bigCubeFace = null;
+    mouseDown = false;
+    return;
+}
 
     function newCubePosition(event) {
         if (new Date().getTime() - lastMoveTimestamp.getTime() > moveReleaseTimeDelta) {
