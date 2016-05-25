@@ -1,6 +1,6 @@
 window.onload = (function() {
 
-//global var
+//Initializing global variables
 var plane;
 var mouseDown = false;
 var rotateStartPoint = new THREE.Vector3(0, 0, 1);
@@ -22,25 +22,25 @@ var deltaX = 0,
 
 var Y = 0,
     X = 0;
-
+// Sound Variables
 var tada = new Audio("audio/tada.mp3");
 var no = new Audio("audio/no.mp3");
-
+//Tutorial Variables
 var tutorialSpin = 1;
 var tutorialDrag = 1;
-
+//Cube and Raycaster.js variables
 var cubeColor = [];
 var raycaster2 = new THREE.Raycaster();
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2(),
 offset = new THREE.Vector3(),
 INTERSECTED, SELECTED, selectedColor;
-
+// Scene, camera and canvas variables
 var scene = new THREE.Scene();
 
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 
-//function for adding scen & figures
+//function for adding scene & figures
 
 function init() {
 
@@ -48,13 +48,13 @@ var canvas = document.getElementById("canvas");
 
 //console.log(canvas.childNodes);
 //console.log(canvas);
-
+//Initialize render and add it to our canvas
 renderer = new THREE.WebGLRenderer({alpha: true});
 renderer.setClearColor(0x000000, 0);
 //renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setSize( canvas.offsetWidth, canvas.offsetHeight );
 canvas.appendChild( renderer.domElement );
-
+//Window resizing
 window.addEventListener('resize', function() {
       var WIDTH = canvas.offsetWidth,
           HEIGHT = canvas.offsetHeight;
@@ -64,10 +64,10 @@ window.addEventListener('resize', function() {
     });
 
 
-//Main cube
+//Initializing main Cube
 
 var geometry = new THREE.BoxGeometry( 2.5, 2.5, 2.5 );
-
+//Randomly assign colors to the cube faces. The colors are taken from a palette of 6 different colors
 for (var i = 0; i < geometry.faces.length; i += 2) {
 
             var color =
@@ -87,7 +87,7 @@ for (var i = 0; i < geometry.faces.length; i += 2) {
             cubeColor.push(geometry.faces[i].color.getStyle());
             //console.log(cubeColor);
         }
-
+// Standard mesh for cube
 var cubeMaterial = new THREE.MeshBasicMaterial(
             {
                 vertexColors: THREE.FaceColors,
@@ -95,16 +95,16 @@ var cubeMaterial = new THREE.MeshBasicMaterial(
             });
 
 //var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-
+//Put togheter the final cube, with its geometry and the material put onto the geometry.
 cube = new THREE.Mesh( geometry, cubeMaterial );
 cube.name = "Big cube";
-
+//Add the cube to our scene
 scene.add( cube );
 
 
 //small cubes
 
-
+//Initializing the creation of the smaller figures, different geometry but same mesh
 var smallBox = new THREE.BoxGeometry( 1, 1, 1 );
 var smallSphere = new THREE.SphereGeometry( 1, 6.2, 6.2 );
 var smallTorus = new THREE.TorusGeometry( 0.7, 0.3, 2, 7 );
@@ -112,7 +112,7 @@ var smallTorus = new THREE.TorusGeometry( 0.7, 0.3, 2, 7 );
 var figures = [smallBox, smallSphere, smallTorus];
 
 //var colors = [ 0xBF4040, 0xBFBF40, 0x40BF40, 0x40BFBF, 0x4040BF, 0xBF40BF];
-
+//Give the smaller figures 1 of the given colors at random.
 for (var i = 0; i < 3; i++){
 
     var smallCubeMaterial = new THREE.MeshBasicMaterial(
@@ -122,10 +122,10 @@ for (var i = 0; i < 3; i++){
         color: cubeColor[Math.floor(Math.random() * cubeColor.length)],
         overdraw: 0.5
     });
-
+//Put togheter the smaller figures with the created geometry and material
 smallCube = new THREE.Mesh( figures[Math.floor(Math.random() * figures.length)], smallCubeMaterial );
 //smallCube = new THREE.Mesh( smallTorus, smallCubeMaterial );
-
+//Assign the smaller figures position to be slightly below the bigger cube.
 smallCube.position.y = -3;
 smallCube.position.x = i*3 - 3;
 
@@ -133,9 +133,14 @@ smallCube.position.x = i*3 - 3;
 //cube.rotation.x = 0;
   //  cube.rotation.y = 0;
     //cube.rotation.z = 0;
-
+//Assign a non-unique name to the smaller cubes, this to distinguish them from the larger cube.
 smallCube.name = 'Small cubes';
+smallCube.wireframe = true;
+smallCube.wireframeLinewidth = 2;
+edges = new THREE.EdgesHelper( smallCube, 0x000000 );
+// Add the small cubes to the scene
 scene.add( smallCube );
+scene.add( edges );
 
 //console.log(smallCube.material.color);
 //console.log(cube.geometry.faces[1].color);
@@ -154,13 +159,13 @@ scene.add( smallCube );
                     scene.add( object );
                 }
 */
-
+//Initialize plane, it is not visible but needed for our objects to move correctly. Also add it to scene.
 plane = new THREE.Mesh(
                     new THREE.PlaneBufferGeometry( 2000, 2000, 8, 8 ),
                     new THREE.MeshBasicMaterial( { visible: false } )
                     );
 scene.add( plane );
-
+//Set camera position, higher value indicates looking at our scene from further distance
 camera.position.z = 7;
 
 /*
@@ -176,17 +181,18 @@ render();
 
 //console.log(canvas.childNodes);
 
-
+//Adding event listeners, in initialize phase only mousedown event is needed, the other events are triggered after a mousedown
 canvas.addEventListener('mousedown', onDocumentMouseDown, false);
 //canvas.addEventListener('mousemove', onDocumentMouseMove, false);
 //canvas.addEventListener('mouseup', onDocumentMouseUp2, false);
+// Call to our animation function which builds our game. Also our render function is inside animate, causing rotations and move to be updated in real time.
 animate();
 
 }
 
 
 
-//copy of mouse move from rotationbox with configs
+//Our function triggered by a mousedown event.
 function onDocumentMouseDown(event) {
     /*var cubeVector = (new THREE.Vector3( 0, 0, 1 )).applyQuaternion(cube.quaternion);
     var cameraVector = (new THREE.Vector3( 0, 0, -1 )).applyQuaternion(camera.quaternion );
@@ -201,18 +207,20 @@ function onDocumentMouseDown(event) {
     event.preventDefault();
 
     //console.log(scene.children);
+    //Take mouse positions in relation to the current size of our window.
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
+    // Initialize a ray via raycaster.js
     raycaster.setFromCamera(mouse, camera);
     var intersects = raycaster.intersectObjects(scene.children);
-
+    // the ray follows our mouse pointer. If the mouse pointer is over some of our objects, the return value is of length > 0
     if (intersects.length > 0) {
         //var TESTI = intersects[0].face.materialIndex;
+        //Whatever object we had our mouse over on mousedown is set to variable SELECTED. this variable inherits all from the object array.
         SELECTED = intersects[0].object;
         //console.log(TESTI);
 
-
+        // Checks if the selected object was the big cube and any mouse event from there triggers the appropiate functions relating to the big cube
         if (SELECTED.name == 'Big cube') {
 
             console.log('Mouse Down IF Big Cube');
@@ -227,28 +235,28 @@ function onDocumentMouseDown(event) {
             };
 
             rotateStartPoint = rotateEndPoint = projectOnTrackball(0, 0);
-
+        // Checks if the mousedown was on one of the smaller figures. Triggers the appropiate mouse functions for small figures.
         }else if(SELECTED.name == 'Small cubes'){
             startPoint = {
                 x: event.clientX,
                 y: event.clientY
             };
             //if (SELECTED.material.color)
-
+            // For the removal of small figure if it is the same color, we must know the color of the face, this function returns the color of the small figure.
             console.log('Mouse Down IF Small Cubes');
             selectedColor = intersects[ 0 ].face.materialIndex;
             //console.log(selectedColor);
             mouseDown = true;
         //console.log(startPoint);
         //console.log(SELECTED);
-
+        // Small figure mouse functions
         document.getElementById("canvas").addEventListener('mousemove', MoveCube, false);
         document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp2, false);
 
     };
   }
 }
-
+    // This function along with its subfunctions handle the rotation of the big cube.
     function onDocumentMouseMove(event) {
         deltaX = event.x - startPoint.x;
         deltaY = event.y - startPoint.y;
@@ -268,7 +276,7 @@ function onDocumentMouseDown(event) {
 
         lastMoveTimestamp = new Date();
     }
-
+    // MoveCube function is for small figures. Moves it around the canvas.
     function MoveCube(event) {
 
         //if (SELECTED.name == "Small cubes") {
@@ -308,6 +316,7 @@ function onDocumentMouseDown(event) {
                               tutorialDrag = 0;
                             }
                             console.log('Mouse Move Small Cubes');
+
 
                         }
 
@@ -406,6 +415,7 @@ function onDocumentMouseDown(event) {
                     SELECTED = null;
                 }
                 else {
+                  SELECTED = null;
                   no.play();
                 }
             }
@@ -419,6 +429,7 @@ function onDocumentMouseDown(event) {
                 }
                 else {
                   no.play();
+                  SELECTED = null;
                 }
             }
             if (smallR == 2 && smallG == 7 && smallB == 2) {
@@ -431,6 +442,7 @@ function onDocumentMouseDown(event) {
                 }
                 else {
                   no.play();
+                  SELECTED = null;
                 }
             }
             if (smallR == 2 && smallG == 7 && smallB == 7) {
@@ -443,6 +455,7 @@ function onDocumentMouseDown(event) {
                 }
                 else {
                   no.play();
+                  SELECTED = null;
                 }
             }
             if (smallR == 2 && smallG == 2 && smallB == 7) {
@@ -455,6 +468,7 @@ function onDocumentMouseDown(event) {
                 }
                 else {
                   no.play();
+                  SELECTED = null;
                 }
             }
             if (smallR == 7 && smallG == 2 && smallB == 7) {
@@ -467,6 +481,7 @@ function onDocumentMouseDown(event) {
                 }
                 else {
                   no.play();
+                  SELECTED = null;
                 }
             }
         }
