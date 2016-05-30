@@ -23,11 +23,14 @@ var deltaX = 0,
 var Y = 0,
     X = 0;
 // Sound Variables
+var soundOn = 1;
 var tada = new Audio("audio/tada.mp3");
 var no = new Audio("audio/no.mp3");
 //Tutorial Variables
-var tutorialSpin = 1;
-var tutorialDrag = 1;
+var tutorialOn = 1;
+var tutorialBlink = 1;
+var tutorialJump = 0;
+var tutorialDrop = 0;
 //Cube and Raycaster.js variables
 var cubeColor = [];
 var bigCubeFace = null;
@@ -270,12 +273,11 @@ function onDocumentMouseDown(event) {
         console.log('Mouse Move Big Cube')
         handleRotation();
 
-        $('#blink-arrow').hide();
-        $('#rotate-text').hide();
-        if (tutorialSpin) {
-          $('#jumping-text').show();
-          $('#jumping-arrow').show();
-          tutorialSpin = 0;
+        if (tutorialOn & tutorialBlink) {
+          hideBlinkElements();
+          tutorialJump = 1;
+          tutorialBlink = 0;
+          showJumpingElements();
         }
 
         startPoint.x = event.x;
@@ -315,22 +317,22 @@ function onDocumentMouseDown(event) {
                         if (intersects.length > 0) {
                             SELECTED.position.copy(intersects[0].point.sub(offset));
                             //matchNRemove(SELECTED, cube);
-                            $('#jumping-text').hide();
-                            $('#jumping-arrow').hide();
-                            if(tutorialDrag && !tutorialSpin) {
-                              $('#drop-text').show();
-                              $('#drop-arrow').show();
-                              tutorialDrag = 0;
+
+                            if (tutorialOn & tutorialJump) {
+                              hideJumpingElements();
+                              showDropElements();
+                              tutorialDrop = 1;
+                              tutorialJump = 0;
                             }
                             console.log('Mouse Move Small Cubes');
                             document.getElementById("canvas").addEventListener('mouseup', onDocumentMouseUp2, false);
-                        
+
                         }
-                        
-                        
+
+
                     }
-                   
-                    
+
+
                 }
                 /*var intersects = raycaster.intersectObjects( scene.children, true );
 
@@ -354,7 +356,7 @@ function onDocumentMouseDown(event) {
                 }
             } */
             //}
-            
+
     }
 
     function onDocumentMouseUp2( event ) {
@@ -381,13 +383,13 @@ function onDocumentMouseDown(event) {
             //SELECTED = null;
             console.log(SELECTED);
             console.log(bigCubeFace);
-            
+
             raycaster2.setFromCamera(mouse, camera);
             console.log(raycaster2);
             bigCubeRay = raycaster2.intersectObjects(scene.children);
             console.log(bigCubeRay);
             bigCubeFace = bigCubeRay[ 0 ].face.materialIndex;
-            
+
             if ((bigCubeFace >= 1 && bigCubeFace <= 6) && SELECTED != null && SELECTED.name == "Small cubes") {
 
                 //xyPos.x > -1 && xyPos.x < 1 && xyPos.y > -1 && xyPos.y < 1
@@ -410,6 +412,76 @@ function onDocumentMouseDown(event) {
         }
     }
 
+    // Disable or enable sound
+    $('#soundToggle').click(function() {
+        var $sound = $('#soundToggle')
+        if ($sound.hasClass("active")) {
+          soundOn = 0;
+          $('#soundToggleText').text('Sound Off');
+        }
+        else {
+          soundOn = 1;
+          $('#soundToggleText').text('Sound On');
+        }
+    })
+
+
+    // Disable or enable tutorial
+    $('#tutorialToggle').click(function() {
+      var $tut = $('#tutorialToggle')
+      if ($tut.hasClass("active")) {
+        tutorialOn = 0;
+        $('#tutorialToggleText').text('Tutorial Off');
+        hideBlinkElements();
+        hideJumpingElements();
+        hideDropElements();
+      }
+      else {
+        tutorialOn = 1;
+        $('#tutorialToggleText').text('Tutorial On');
+        if (tutorialBlink) {
+          showBlinkElements();
+        }
+        else if (tutorialJump) {
+          showJumpingElements();
+        }
+        else if (tutorialDrop) {
+          showDropElements();
+        }
+      }
+    })
+
+    // Show first step in tutorial
+    function showBlinkElements() {
+      $('#blink-arrow').show();
+      $('#rotate-text').show();
+    }
+
+    // Hide first step in tutorial
+    function hideBlinkElements() {
+      $('#blink-arrow').hide();
+      $('#rotate-text').hide();
+    }
+
+    // Show second step in tutorial
+    function showJumpingElements() {
+      $('#jumping-text').show();
+      $('#jumping-arrow').show();
+    }
+
+    // Hide second step in tutorial
+    function hideJumpingElements() {
+      $('#jumping-text').hide();
+      $('#jumping-arrow').hide();
+    }
+
+    // Show third step in tutorial
+    function showDropElements() {
+      $('#drop-arrow').show();
+      $('#drop-text').show();
+    }
+
+    // Hide third step in tutoral
     function hideDropElements() {
       $('#drop-arrow').hide();
       $('#drop-text').hide();
@@ -428,8 +500,13 @@ function onDocumentMouseDown(event) {
             if (smallR == 7 && smallG == 2 && smallB == 2) {
                 if (bigCubeFace == 6) {
                     scene.remove(SELECTED);
-                    tada.play();
-                    hideDropElements();
+                    if (soundOn){
+                      tada.play();
+                    }
+                    if (tutorialOn) {
+                      hideDropElements();
+                      tutorialDrop = 0;
+                    }
                     console.log('Small Cube Removed');
                     SELECTED = null;
                     bigCubeFace = null;
@@ -437,20 +514,29 @@ function onDocumentMouseDown(event) {
                 else {
                   SELECTED = null;
                   bigCubeFace = null;
-                  no.play();
+                  if (soundOn){
+                    no.play();
+                  }
                 }
             }
             if (smallR == 7 && smallG == 7 && smallB == 2) {
                 if (bigCubeFace == 1) {
                     scene.remove(SELECTED);
-                    tada.play();
-                    hideDropElements();
+                    if (soundOn){
+                      tada.play();
+                    }
+                    if (tutorialOn) {
+                      hideDropElements();
+                      tutorialDrop = 0;
+                    }
                     console.log('Small Cube Removed');
                     SELECTED = null;
                     bigCubeFace = null;
                 }
                 else {
-                  no.play();
+                  if (soundOn){
+                    no.play();
+                  }
                   SELECTED = null;
                   bigCubeFace = null;
                 }
@@ -458,14 +544,21 @@ function onDocumentMouseDown(event) {
             if (smallR == 2 && smallG == 7 && smallB == 2) {
                 if (bigCubeFace == 2) {
                     scene.remove(SELECTED);
-                    tada.play();
-                    hideDropElements();
+                    if (soundOn){
+                      tada.play();
+                    }
+                    if (tutorialOn) {
+                      hideDropElements();
+                      tutorialDrop = 0;
+                    }
                     console.log('Small Cube Removed');
                     SELECTED = null;
                     bigCubeFace = null;
                 }
                 else {
-                  no.play();
+                  if (soundOn){
+                    no.play();
+                  }
                   SELECTED = null;
                   bigCubeFace = null;
                 }
@@ -473,14 +566,21 @@ function onDocumentMouseDown(event) {
             if (smallR == 2 && smallG == 7 && smallB == 7) {
                 if (bigCubeFace == 3) {
                     scene.remove(SELECTED);
-                    tada.play();
-                    hideDropElements();
+                    if (soundOn){
+                      tada.play();
+                    }
+                    if (tutorialOn) {
+                      hideDropElements();
+                      tutorialDrop = 0;
+                    }
                     console.log('Small Cube Removed');
                     SELECTED = null;
                     bigCubeFace = null;
                 }
                 else {
-                  no.play();
+                  if (soundOn){
+                    no.play();
+                  }
                   SELECTED = null;
                   bigCubeFace = null;
                 }
@@ -488,14 +588,21 @@ function onDocumentMouseDown(event) {
             if (smallR == 2 && smallG == 2 && smallB == 7) {
                 if (bigCubeFace == 4) {
                     scene.remove(SELECTED);
-                    tada.play();
-                    hideDropElements();
+                    if (soundOn){
+                      tada.play();
+                    }
+                    if (tutorialOn) {
+                      hideDropElements();
+                      tutorialDrop = 0;
+                    }
                     console.log('Small Cube Removed');
                     SELECTED = null;
                     bigCubeFace = null;
                 }
                 else {
-                  no.play();
+                  if (soundOn){
+                    no.play();
+                  }
                   SELECTED = null;
                   bigCubeFace = null;
                 }
@@ -503,14 +610,21 @@ function onDocumentMouseDown(event) {
             if (smallR == 7 && smallG == 2 && smallB == 7) {
                 if (bigCubeFace == 5) {
                     scene.remove(SELECTED);
-                    tada.play();
-                    hideDropElements();
+                    if (soundOn){
+                      tada.play();
+                    }
+                    if (tutorialOn) {
+                      hideDropElements();
+                      tutorialDrop = 0;
+                    }
                     console.log('Small Cube Removed');
                     SELECTED = null;
                     bigCubeFace = null;
                 }
                 else {
-                  no.play();
+                  if (soundOn){
+                    no.play();
+                  }
                   SELECTED = null;
                   bigCubeFace = null;
                 }
@@ -541,6 +655,7 @@ function onDocumentMouseDown(event) {
             deltaX = event.x - startPoint.x;
             deltaY = event.y - startPoint.y;
         }
+
 
         mouseDown = false;
 

@@ -18,7 +18,7 @@ body{
 
 p {
   font-family: "Comic Sans MS", cursive, sans-serif;
-  font-size: 200%;
+  font-size: 4vmin;
 }
 
 #rotate-text {
@@ -138,4 +138,9 @@ p {
   position: absolute;
   display: none;
   z-index: -1;
+}
+
+#options {
+  right: 0%;
+  position: absolute;
 }
