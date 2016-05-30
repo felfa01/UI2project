@@ -22,6 +22,9 @@ var deltaX = 0,
 
 var Y = 0,
     X = 0;
+// Language
+sessionStorage.setItem("lang", "english");
+translate(sessionStorage.lang);
 // Sound Variables
 var soundOn = 1;
 var tada = new Audio("audio/tada.mp3");
@@ -417,11 +420,13 @@ function onDocumentMouseDown(event) {
         var $sound = $('#soundToggle')
         if ($sound.hasClass("active")) {
           soundOn = 0;
-          $('#soundToggleText').text('Sound Off');
+          $('#soundToggleText').attr('langKey', 'soundOff');
+          translate(sessionStorage.lang);
         }
         else {
           soundOn = 1;
-          $('#soundToggleText').text('Sound On');
+          $('#soundToggleText').attr('langKey', 'soundOn');
+          translate(sessionStorage.lang);
         }
     })
 
@@ -431,14 +436,16 @@ function onDocumentMouseDown(event) {
       var $tut = $('#tutorialToggle')
       if ($tut.hasClass("active")) {
         tutorialOn = 0;
-        $('#tutorialToggleText').text('Tutorial Off');
+        $('#tutorialToggleText').attr('langKey', 'tutorialOff');
+        translate(sessionStorage.lang);
         hideBlinkElements();
         hideJumpingElements();
         hideDropElements();
       }
       else {
         tutorialOn = 1;
-        $('#tutorialToggleText').text('Tutorial On');
+        $('#tutorialToggleText').attr('langKey', 'tutorialOn');
+        translate(sessionStorage.lang);
         if (tutorialBlink) {
           showBlinkElements();
         }

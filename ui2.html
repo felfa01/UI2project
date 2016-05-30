@@ -11,27 +11,24 @@
     <script src="three.min.js"></script>
     <script src="ui2.js"></script>
     <script src="Projector.js"></script>
+    <script src="Dictionary.js"></script>
 </head>
 <body>
     <div id="canvas">
-      <div id="rotate-text"><p>Try to spin the big cube!</p></div>
+      <div id="rotate-text"><p class="lang" langKey="rotate"></p></div>
       <div id="blink-arrow"></div>
-      <div id="jumping-text"><p>Well done! Now try to drag one of the small objects!</p></div>
+      <div id="jumping-text"><p class="lang" langKey="jumping"></p></div>
       <div id="jumping-arrow"></div>
-      <div id="drop-text"><p>Now drop the small object on the corresponding side of the big cube.</p></div>
+      <div id="drop-text"><p class="lang" langKey="drop"></p></div>
       <div id="drop-arrow"></div>
       <div id="options" class="btn-group" data-toggle="buttons">
         <label id="tutorialToggle" class="btn btn-primary active">
           <input type="checkbox" autocomplete="off" checked>
-          <p id="tutorialToggleText">
-            Tutorial On
-          </p>
+          <p id="tutorialToggleText" class="lang" langKey="tutorialOn"></p>
         </label>
         <label id="soundToggle" class="btn btn-primary active">
           <input type="checkbox" autocomplete="off" checked>
-          <p id="soundToggleText">
-            Sound On
-          </p>
+          <p id="soundToggleText" class="lang" langKey="soundOn"></p>
         </label>
       </div>
     </div>
