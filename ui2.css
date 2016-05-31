@@ -25,7 +25,7 @@ p {
   width: 50%;
   height: 5%;
   left: 30%;
-  top: 10%;
+  top: 15%;
   position: absolute;
   z-index: -1;
 
@@ -35,7 +35,7 @@ p {
   content:url("images/blinkarrow.png");
   width: 0;
   height: 0;
-  top: 15%;
+  top: 16%;
   left: 35%;
   position: absolute;
   transform: translate(-50%, -50%);
