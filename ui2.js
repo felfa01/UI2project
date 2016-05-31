@@ -105,21 +105,23 @@ var cubeMaterial = new THREE.MeshBasicMaterial(
 //var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 //Put togheter the final cube, with its geometry and the material put onto the geometry.
 cube = new THREE.Mesh( geometry, cubeMaterial );
+
 cube.name = "Big cube";
 cube.geometry.faces[0].materialIndex = 6;
 cube.geometry.faces[1].materialIndex = 6;
 //Add the cube to our scene
-scene.add( cube );
 
+scene.add( cube );
 
 //small cubes
 
 //Initializing the creation of the smaller figures, different geometry but same mesh
 var smallBox = new THREE.BoxGeometry( 1, 1, 1 );
-var smallSphere = new THREE.SphereGeometry( 1, 6.2, 6.2 );
+//var smallSphere = new THREE.SphereGeometry( 1, 6.2, 6.2 );
+var smallCylinder = new THREE.CylinderGeometry( 0.7, 0.7, 0.7, 0.3 );
 var smallTorus = new THREE.TorusGeometry( 0.7, 0.3, 2, 7 );
 
-var figures = [smallBox, smallSphere, smallTorus];
+var figures = [smallBox, smallCylinder, smallTorus];
 
 //var colors = [ 0xBF4040, 0xBFBF40, 0x40BF40, 0x40BFBF, 0x4040BF, 0xBF40BF];
 //Give the smaller figures 1 of the given colors at random.
@@ -134,28 +136,36 @@ for (var i = 0; i < 3; i++){
         wireframe: true,
         wireframeLinewidth: 10
     });
-//Put togheter the smaller figures with the created geometry and material
-smallCube = new THREE.Mesh( figures[Math.floor(Math.random() * figures.length)], smallCubeMaterial );
-//smallCube = new THREE.Mesh( smallTorus, smallCubeMaterial );
-//Assign the smaller figures position to be slightly below the bigger cube.
-smallCube.position.y = -3;
-smallCube.position.x = i*3 - 3;
-smallCube.position.z = 1;
+  //Put togheter the smaller figures with the created geometry and material
+  smallCube = new THREE.Mesh( figures[Math.floor(Math.random() * figures.length)], smallCubeMaterial );
+  //smallCube = new THREE.Mesh( smallTorus, smallCubeMaterial );
+  //Assign the smaller figures position to be slightly below the bigger cube.
+  smallCube.position.y = -3;
+  smallCube.position.x = i*3 - 3;
+  smallCube.position.z = 1;
 
-    //console.log(cube);
-//cube.rotation.x = 0;
-  //  cube.rotation.y = 0;
-    //cube.rotation.z = 0;
-//Assign a non-unique name to the smaller cubes, this to distinguish them from the larger cube.
-smallCube.name = 'Small cubes';
+      //console.log(cube);
+  //cube.rotation.x = 0;
+    //  cube.rotation.y = 0;
+      //cube.rotation.z = 0;
+  //Assign a non-unique name to the smaller cubes, this to distinguish them from the larger cube.
+  smallCube.name = 'Small cubes';
 
-// Add the small cubes to the scene
-scene.add( smallCube );
+  // Add the small cubes to the scene
 
 
-//console.log(smallCube.material.color);
-//console.log(cube.geometry.faces[1].color);
+  scene.add( smallCube );
+/*  try {
+    glow = new THREEx.GeometricGlowMesh(smallCube);
+    smallCube.add(glow.object3d);
+  } catch(e) {
+    console.log("feeeel")
+  }
 
+  var insideUniforms  = glow.insideMesh.material.uniforms
+  insideUniforms.glowColor.value.set(smallCubeMaterial.color);
+  var outsideUniforms = glow.outsideMesh.material.uniforms
+  outsideUniforms.glowColor.value.set('black') */
 }
 
 
@@ -414,6 +424,18 @@ function onDocumentMouseDown(event) {
             }
         }
     }
+
+    //Switch to swedish
+    $('#swedish').click(function() {
+      sessionStorage.setItem("lang", "svenska");
+      translate(sessionStorage.lang);
+    })
+
+    //Switch to english
+    $('#english').click(function() {
+      sessionStorage.setItem("lang", "english");
+      translate(sessionStorage.lang);
+    })
 
     // Disable or enable sound
     $('#soundToggle').click(function() {

@@ -19,6 +19,7 @@ var dictionary = {
     }
 }
 
+// Translate the text in html elements with attribute langKey according to dictionary above
 function translate(lang) {
   sessionStorage.setItem("lang", lang);
   $(".lang").each(function() {

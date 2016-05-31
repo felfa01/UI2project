@@ -144,3 +144,23 @@ p {
   right: 0%;
   position: absolute;
 }
+
+#languages {
+  left: 0%;
+  position: absolute;
+  width: 10%
+}
+
+#swedish {
+  content:url("images/Sweden.jpg");
+  border: 1px solid black;
+  width: 100%;
+  display: inline-block;
+}
+
+#english {
+  content: url("images/United_Kingdom.jpg");
+  border: 1px solid black;
+  width: 100%;
+  display: inline-block;
+}
