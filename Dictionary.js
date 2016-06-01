@@ -6,7 +6,9 @@ var dictionary = {
         "tutorialOn": "Tutorial On",
         "tutorialOff": "Tutorial Off",
         "soundOn": "Sound On",
-        "soundOff": "Sound Off"
+        "soundOff": "Sound Off",
+        "winText": "Congratulations!",
+        "playAgain": "Play Again"
     },
     "svenska": {
         "rotate": "Försök att snurra den stora kuben!",
@@ -15,7 +17,9 @@ var dictionary = {
         "tutorialOn": "Genomgång På",
         "tutorialOff": "Genomgång Av",
         "soundOn": "Ljud På",
-        "soundOff": "Ljud Av"
+        "soundOff": "Ljud Av",
+        "winText": "Grattis!",
+        "playAgain": "Spela Igen"
     }
 }
 

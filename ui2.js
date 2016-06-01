@@ -22,6 +22,8 @@ var deltaX = 0,
 
 var Y = 0,
     X = 0;
+
+var completed = 0;
 // Language
 sessionStorage.setItem("lang", "english");
 translate(sessionStorage.lang);
@@ -162,7 +164,6 @@ animate();
 
 function createSmallCubes(){
   //small cubes
-
 //Initializing the creation of the smaller figures, different geometry but same mesh
 var smallBox = new THREE.BoxGeometry( 1, 1, 1 );
 //var smallSphere = new THREE.SphereGeometry( 1, 6.2, 6.2 );
@@ -518,6 +519,19 @@ function onDocumentMouseDown(event) {
       $('#drop-text').hide();
     }
 
+    //
+    function finnishGame() {
+      console.log(completed);
+      if (completed == 3) {
+        $('#finnish').show();
+      }
+    }
+    $('#playAgain').click(function() {
+      $('#finnish').hide();
+      createSmallCubes();
+      completed = 0;
+    })
+
     function matchSmallWithBig (bigCubeFace, SELECTED) {
         var smallR = Math.round(SELECTED.material.color.r *10);
         var smallG = Math.round(SELECTED.material.color.g *10);
@@ -541,6 +555,8 @@ function onDocumentMouseDown(event) {
                     console.log('Small Cube Removed');
                     SELECTED = null;
                     bigCubeFace = null;
+                    completed += 1;
+                    finnishGame();
                 }
                 else {
                   SELECTED = null;
@@ -563,6 +579,8 @@ function onDocumentMouseDown(event) {
                     console.log('Small Cube Removed');
                     SELECTED = null;
                     bigCubeFace = null;
+                    completed += 1;
+                    finnishGame();
                 }
                 else {
                   if (soundOn){
@@ -585,6 +603,8 @@ function onDocumentMouseDown(event) {
                     console.log('Small Cube Removed');
                     SELECTED = null;
                     bigCubeFace = null;
+                    completed += 1;
+                    finnishGame();
                 }
                 else {
                   if (soundOn){
@@ -607,6 +627,8 @@ function onDocumentMouseDown(event) {
                     console.log('Small Cube Removed');
                     SELECTED = null;
                     bigCubeFace = null;
+                    completed += 1;
+                    finnishGame();
                 }
                 else {
                   if (soundOn){
@@ -629,6 +651,8 @@ function onDocumentMouseDown(event) {
                     console.log('Small Cube Removed');
                     SELECTED = null;
                     bigCubeFace = null;
+                    completed += 1;
+                    finnishGame();
                 }
                 else {
                   if (soundOn){
@@ -651,6 +675,8 @@ function onDocumentMouseDown(event) {
                     console.log('Small Cube Removed');
                     SELECTED = null;
                     bigCubeFace = null;
+                    completed += 1;
+                    finnishGame();
                 }
                 else {
                   if (soundOn){
