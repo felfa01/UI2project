@@ -531,8 +531,10 @@ function onDocumentMouseDown(event) {
     $('#playAgain').click(function() {
       $('#finish').hide();
       createSmallCubes();
+      if(soundOn){
       completed = 0;
-    })
+    }
+  })
 
     function matchSmallWithBig (bigCubeFace, SELECTED) {
         var smallR = Math.round(SELECTED.material.color.r *10);
