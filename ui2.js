@@ -113,7 +113,55 @@ cube.geometry.faces[1].materialIndex = 6;
 
 scene.add( cube );
 
-//small cubes
+
+createSmallCubes();
+
+/*
+                for ( var i = 0; i < 3; i ++ ) {
+                    var object = new THREE.Mesh( smallGeometry, cubeMaterial );
+                    //object.position.x = 0;
+                    //object.position.y = 100;
+                    //object.position.z = 0;
+                    console.log(object);
+                    console.log(cube);
+                    scene.add( object );
+                }
+*/
+//Initialize plane, it is not visible but needed for our objects to move correctly. Also add it to scene.
+plane = new THREE.Mesh(
+                    new THREE.PlaneBufferGeometry( 2000, 2000, 8, 8 ),
+                    new THREE.MeshBasicMaterial( { visible: false } )
+                    );
+plane.name = "plane";
+scene.add( plane );
+//Set camera position, higher value indicates looking at our scene from further distance
+camera.position.z = 8;
+
+/*
+//reder function from before adding rotationBox code.
+ render = function () {
+	requestAnimationFrame( render );
+
+	renderer.render(scene, camera);
+	};
+
+render();
+*/
+
+//console.log(canvas.childNodes);
+
+//Adding event listeners, in initialize phase only mousedown event is needed, the other events are triggered after a mousedown
+canvas.addEventListener('mouseup', onDocumentMouseUp, false);
+canvas.addEventListener('mousedown', onDocumentMouseDown, false);
+//canvas.addEventListener('mousemove', onDocumentMouseMove, false);
+//canvas.addEventListener('mouseup', onDocumentMouseUp2, false);
+// Call to our animation function which builds our game. Also our render function is inside animate, causing rotations and move to be updated in real time.
+animate();
+
+}
+
+function createSmallCubes(){
+  //small cubes
 
 //Initializing the creation of the smaller figures, different geometry but same mesh
 var smallBox = new THREE.BoxGeometry( 1, 1, 1 );
@@ -167,53 +215,7 @@ for (var i = 0; i < 3; i++){
   var outsideUniforms = glow.outsideMesh.material.uniforms
   outsideUniforms.glowColor.value.set('black') */
 }
-
-
-/*
-                for ( var i = 0; i < 3; i ++ ) {
-                    var object = new THREE.Mesh( smallGeometry, cubeMaterial );
-                    //object.position.x = 0;
-                    //object.position.y = 100;
-                    //object.position.z = 0;
-                    console.log(object);
-                    console.log(cube);
-                    scene.add( object );
-                }
-*/
-//Initialize plane, it is not visible but needed for our objects to move correctly. Also add it to scene.
-plane = new THREE.Mesh(
-                    new THREE.PlaneBufferGeometry( 2000, 2000, 8, 8 ),
-                    new THREE.MeshBasicMaterial( { visible: false } )
-                    );
-plane.name = "plane";
-scene.add( plane );
-//Set camera position, higher value indicates looking at our scene from further distance
-camera.position.z = 8;
-
-/*
-//reder function from before adding rotationBox code.
- render = function () {
-	requestAnimationFrame( render );
-
-	renderer.render(scene, camera);
-	};
-
-render();
-*/
-
-//console.log(canvas.childNodes);
-
-//Adding event listeners, in initialize phase only mousedown event is needed, the other events are triggered after a mousedown
-canvas.addEventListener('mouseup', onDocumentMouseUp, false);
-canvas.addEventListener('mousedown', onDocumentMouseDown, false);
-//canvas.addEventListener('mousemove', onDocumentMouseMove, false);
-//canvas.addEventListener('mouseup', onDocumentMouseUp2, false);
-// Call to our animation function which builds our game. Also our render function is inside animate, causing rotations and move to be updated in real time.
-animate();
-
 }
-
-
 
 //Our function triggered by a mousedown event.
 function onDocumentMouseDown(event) {
