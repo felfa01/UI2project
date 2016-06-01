@@ -525,15 +525,15 @@ function onDocumentMouseDown(event) {
       console.log(completed);
       if (completed == 3) {
         $('#finish').show();
+        if(soundOn){
         congrats.play();
+        }
       }
     }
     $('#playAgain').click(function() {
       $('#finish').hide();
       createSmallCubes();
-      if(soundOn){
       completed = 0;
-    }
   })
 
     function matchSmallWithBig (bigCubeFace, SELECTED) {
