@@ -30,7 +30,8 @@ translate(sessionStorage.lang);
 // Sound Variables
 var soundOn = 1;
 var tada = new Audio("audio/tada.mp3");
-var no = new Audio("audio/no.mp3");
+var no = new Audio("audio/Computer Error Alert.mp3");
+var congrats = new Audio("audio/congrats.mp3");
 //Tutorial Variables
 var tutorialOn = 1;
 var tutorialBlink = 1;
@@ -520,14 +521,15 @@ function onDocumentMouseDown(event) {
     }
 
     //
-    function finnishGame() {
+    function finishGame() {
       console.log(completed);
       if (completed == 3) {
-        $('#finnish').show();
+        $('#finish').show();
+        congrats.play();
       }
     }
     $('#playAgain').click(function() {
-      $('#finnish').hide();
+      $('#finish').hide();
       createSmallCubes();
       completed = 0;
     })
@@ -556,7 +558,7 @@ function onDocumentMouseDown(event) {
                     SELECTED = null;
                     bigCubeFace = null;
                     completed += 1;
-                    finnishGame();
+                    finishGame();
                 }
                 else {
                   SELECTED = null;
@@ -580,7 +582,7 @@ function onDocumentMouseDown(event) {
                     SELECTED = null;
                     bigCubeFace = null;
                     completed += 1;
-                    finnishGame();
+                    finishGame();
                 }
                 else {
                   if (soundOn){
@@ -604,7 +606,7 @@ function onDocumentMouseDown(event) {
                     SELECTED = null;
                     bigCubeFace = null;
                     completed += 1;
-                    finnishGame();
+                    finishGame();
                 }
                 else {
                   if (soundOn){
@@ -628,7 +630,7 @@ function onDocumentMouseDown(event) {
                     SELECTED = null;
                     bigCubeFace = null;
                     completed += 1;
-                    finnishGame();
+                    finishGame();
                 }
                 else {
                   if (soundOn){
@@ -652,7 +654,7 @@ function onDocumentMouseDown(event) {
                     SELECTED = null;
                     bigCubeFace = null;
                     completed += 1;
-                    finnishGame();
+                    finishGame();
                 }
                 else {
                   if (soundOn){
@@ -676,7 +678,7 @@ function onDocumentMouseDown(event) {
                     SELECTED = null;
                     bigCubeFace = null;
                     completed += 1;
-                    finnishGame();
+                    finishGame();
                 }
                 else {
                   if (soundOn){
